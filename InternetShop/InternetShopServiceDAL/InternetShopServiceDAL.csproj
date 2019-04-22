@@ -41,17 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingModels\BasketBindingModel.cs" />
     <Compile Include="BindingModels\ComponentBindingModel.cs" />
-    <Compile Include="BindingModels\ComponentProductBindingModel.cs" />
+    <Compile Include="BindingModels\ProductBasketBindingModel.cs" />
+    <Compile Include="BindingModels\ProductBindingModel.cs" />
     <Compile Include="BindingModels\RequestBindingModel.cs" />
-    <Compile Include="BindingModels\RequestComponentBindingModel.cs" />
+    <Compile Include="BindingModels\ClientBindingModel.cs" />
+    <Compile Include="Interfaces\IBasketServise.cs" />
+    <Compile Include="Interfaces\IClientServise.cs" />
     <Compile Include="Interfaces\IComponentService.cs" />
-    <Compile Include="Interfaces\IRequestService.cs" />
+    <Compile Include="Interfaces\IProductServise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\ComponentProductViewModel.cs" />
+    <Compile Include="ViewModel\BasketViewModel.cs" />
+    <Compile Include="ViewModel\ClientViewModel.cs" />
     <Compile Include="ViewModel\ComponentViewModel.cs" />
-    <Compile Include="ViewModel\RequestViewModel.cs" />
-    <Compile Include="ViewModel\RequestComponentViewModel.cs" />
+    <Compile Include="ViewModel\ProductBasketViewModel.cs" />
+    <Compile Include="ViewModel\ProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InternetShopModel\InternetShopModel.csproj">
