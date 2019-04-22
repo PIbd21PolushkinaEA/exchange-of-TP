@@ -8,9 +8,9 @@ namespace InternetShopModel
 {
     public class Basket
     {
-        private int Id { get; set; }
-        private int CountOfChoosedProducts { get; set; }
-        private int SumOfChoosedProducts { get; set; }
-        private int ClientID { get; set; }
+        public int Id { get; set; }
+        public int CountOfChoosedProducts { get; set; }
+        public int SumOfChoosedProducts { get; set; }
+        public int ClientID { get; set; }
     }
 }
