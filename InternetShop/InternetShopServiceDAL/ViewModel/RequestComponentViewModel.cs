@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternetShopServiceDAL.BindingModels {
-    public class RequestComponentBindingModel {
+namespace InternetShopServiceDAL.ViewModel {
+    public class RequestComponentViewModel {
         public int ComponentID { get; set; }
         public int RequestID { get; set; }
         public int Count { get; set; }
