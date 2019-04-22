@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InternetShopModel
 {
-    public class Appliances
+    public class Component
     {
         private int Id { get; set; }
         private string Name { get; set; }

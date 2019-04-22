@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace InternetShopModel
 {
-    public class AppliancesProduct
+    public class ComponentProduct
     {
-        private int AppliancesID { get; set; }
+        private int ComponentID { get; set; }
         private int ProductID { get; set; }
         private int Count { get; set; }
     }
