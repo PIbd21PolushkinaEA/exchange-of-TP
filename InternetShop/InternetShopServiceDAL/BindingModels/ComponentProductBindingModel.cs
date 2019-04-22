@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternetShopServiceDAL.ViewModel {
-    public class ComponentViewModel {
+namespace InternetShopServiceDAL.BindingModels {
+    public class ComponentProductBindingModel {
     }
 }

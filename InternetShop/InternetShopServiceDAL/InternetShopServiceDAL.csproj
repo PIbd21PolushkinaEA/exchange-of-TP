@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingModels\ComponentBindingModel.cs" />
+    <Compile Include="BindingModels\ComponentProductBindingModel.cs" />
     <Compile Include="BindingModels\RequestBindingModel.cs" />
+    <Compile Include="BindingModels\RequestComponentBindingModel.cs" />
     <Compile Include="Interfaces\IComponentService.cs" />
+    <Compile Include="Interfaces\IRequestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ComponentViewModel.cs" />
   </ItemGroup>
