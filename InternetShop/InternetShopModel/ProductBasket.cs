@@ -8,10 +8,10 @@ namespace InternetShopModel
 {
     public class ProductBasket
     {
-        private int ProductID { get; set; }
-        private int BasketID { get; set; }
-        private int Count { get; set; }
-        private bool isReserved;
+        public int ProductID { get; set; }
+        public int BasketID { get; set; }
+        public int Count { get; set; }
+        public bool IsReserved { get; set; }
     }
 }
  

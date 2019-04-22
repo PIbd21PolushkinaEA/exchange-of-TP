@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternetShopModel
+namespace InternetShopServiceDAL
 {
-    public class Request
+    public class ClientBindingModel
     {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
+
     }
 }
