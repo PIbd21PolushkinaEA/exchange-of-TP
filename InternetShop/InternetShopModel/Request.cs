@@ -8,7 +8,7 @@ namespace InternetShopModel
 {
     public class Request
     {
-        private int Id { get; set; }
-        private DateTime date { get; set; }
+        public int Id { get; set; }
+        public DateTime date { get; set; }
     }
 }

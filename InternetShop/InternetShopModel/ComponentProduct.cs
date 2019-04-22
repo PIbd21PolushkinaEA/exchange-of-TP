@@ -8,8 +8,8 @@ namespace InternetShopModel
 {
     public class ComponentProduct
     {
-        private int ComponentID { get; set; }
-        private int ProductID { get; set; }
-        private int Count { get; set; }
+        public int ComponentID { get; set; }
+        public int ProductID { get; set; }
+        public int Count { get; set; }
     }
 }
