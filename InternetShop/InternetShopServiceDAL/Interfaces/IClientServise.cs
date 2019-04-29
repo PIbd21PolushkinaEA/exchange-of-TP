@@ -10,6 +10,8 @@ namespace InternetShopServiceDAL.Interfaces
 {
     public interface IClientServise
     {
+        List<ClientViewModel> GetList();
+
         ClientViewModel GetElement(int id);
 
         void AddElement(ClientBindingModel model);

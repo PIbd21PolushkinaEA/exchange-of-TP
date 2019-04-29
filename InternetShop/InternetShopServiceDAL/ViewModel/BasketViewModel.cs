@@ -12,6 +12,5 @@ namespace InternetShopServiceDAL.ViewModel
         public int CountOfChoosedProducts { get; set; }
         public int SumOfChoosedProducts { get; set; }
         public int ClientID { get; set; }
-        public List<ProductBasketViewModel> ProductsBasket { get; set; }
     }
 }
