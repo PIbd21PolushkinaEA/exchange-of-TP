@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace InternetShopServiceDAL.ViewModel {
-    public class RequestViewModel {
+    public class RequestComponentBindingModel {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public List<RequestComponentBindingModel> RequestComponents { get; set; }
+        public int ComponentID { get; set; }
+        public int RequestID { get; set; }
+        public int Count { get; set; }
     }
 }

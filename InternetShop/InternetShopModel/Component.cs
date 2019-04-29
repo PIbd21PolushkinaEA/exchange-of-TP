@@ -27,6 +27,5 @@ namespace InternetShopModel
         public virtual List<ComponentProduct> ComponentProducts { get; set; }
         [ForeignKey("ComponentID")]
         public virtual List<RequestComponent> ComponentRequests { get; set; }
-
     }
 }
