@@ -8,10 +8,8 @@ using InternetShopServiceDAL.ViewModel;
 
 namespace InternetShopServiceDAL.Interfaces
 {
-    public interface IBasketServise
+    public interface IBasketService
     {
-        List<BasketViewModel> GetList();
-
         BasketViewModel GetElement(int id);
 
         void AddElement(BasketBindingModel model);
