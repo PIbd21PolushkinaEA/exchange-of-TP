@@ -22,7 +22,7 @@ namespace InternetShopModel
 
         public virtual Client Client { get; set; }
 
-        [ForeignKey("BasketId")]
+        [ForeignKey("BasketID")]
         public virtual List<ProductBasket> ProductsBasket { get; set; }
 
     }

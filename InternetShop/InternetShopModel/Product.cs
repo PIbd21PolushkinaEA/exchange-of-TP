@@ -18,10 +18,10 @@ namespace InternetShopModel
         [Required]
         public int Price { get; set; }
 
-        [ForeignKey("ProductId")]
+        [ForeignKey("ProductID")]
         public virtual List<ProductBasket> ProductsBasket { get; set; }
 
-        [ForeignKey("ProductId")]
+        [ForeignKey("ProductID")]
         public virtual List<ComponentProduct> ComponentsProduct { get; set; }
 
     }

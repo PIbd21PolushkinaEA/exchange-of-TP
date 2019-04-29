@@ -21,7 +21,7 @@ namespace InternetShopModel
         [Required]
         public string Password { get; set; }
 
-        [ForeignKey("ClientId")]
+        [ForeignKey("ClientID")]
         public virtual List<Basket> Baskets { get; set; }
     }
 }
