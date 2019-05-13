@@ -8,16 +8,16 @@ using InternetShopServiceDAL.ViewModel;
 
 namespace InternetShopServiceDAL.Interfaces
 {
-    public interface IMainClient
+    public interface IMainClientServise
     {
         //покупки
         List<ProductViewModel> GetList();
 
+        ProductViewModel GetElement(int id);
+
         void AddToBasket(ProductBindingModel model);
 
-        void UpdToBasket(ProductBindingModel model);
-
-        void DelFromBasket(ProductBindingModel model);
+        void UpdProducts(ProductBindingModel model);
 
     }
 }

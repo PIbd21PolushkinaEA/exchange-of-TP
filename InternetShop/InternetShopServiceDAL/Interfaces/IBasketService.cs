@@ -10,9 +10,11 @@ namespace InternetShopServiceDAL.Interfaces
 {
     public interface IBasketService
     {
+        List<BasketViewModel> GetBaskets();
+
         BasketViewModel GetElement(int id);
 
-        void AddElement(BasketBindingModel model);
+        List<ProductBasketViewModel> GetList(int index);
 
         void UpdElement(BasketBindingModel model);
 

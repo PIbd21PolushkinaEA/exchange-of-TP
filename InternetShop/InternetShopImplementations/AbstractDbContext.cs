@@ -31,8 +31,6 @@ namespace InternetShopImplementations
         public virtual DbSet<ProductBasket> ProductsBasket { get; set; }
 
         public virtual DbSet<RequestComponent> RequestComponents { get; set; }
-
-
-
+        
     }
 }
