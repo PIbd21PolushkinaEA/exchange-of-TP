@@ -49,7 +49,7 @@ namespace InternetShopWeb
             }
             catch (Exception ex)
             {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Есть клиент с такой почтой');</script>");
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
             }
         }
 
@@ -65,7 +65,7 @@ namespace InternetShopWeb
                 {
                     if (client.Email.Equals(email) && client.Password.Equals(password))
                     {
-                        Server.Transfer("FormClient.aspx");//MainClient
+                        Server.Transfer("FormMainClient.aspx");
                     }
                     else Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Нет такого пользователя');</script>");
                 }

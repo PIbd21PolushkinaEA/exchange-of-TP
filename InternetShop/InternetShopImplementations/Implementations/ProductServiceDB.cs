@@ -18,7 +18,10 @@ namespace InternetShopImplementations.Implementations
         {
             this.context = context;
         }
-
+        public ProductServiceDB()
+        {
+            this.context = new AbstractWebDbContext();
+        }
         public List<ProductViewModel> GetList()
         {
             List<ProductViewModel> result = context.Products.Select(rec => new ProductViewModel
