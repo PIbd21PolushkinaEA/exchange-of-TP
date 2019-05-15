@@ -62,8 +62,8 @@ namespace InternetShopImplementations.Implementations
 
                     if (source.Baskets[i].ProductsBasket[i] != null)
                     {
-                        source.Baskets[i].ProductsBasket[i].ProductID = model.Id;
-                        source.Baskets[i].ProductsBasket[i].BasketID = source.Baskets[i].Id;
+                        source.Baskets[i].ProductsBasket[i].ProductId = model.Id;
+                        source.Baskets[i].ProductsBasket[i].BasketId = source.Baskets[i].Id;
                         break;
                     }
                 }

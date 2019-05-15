@@ -22,7 +22,7 @@ namespace InternetShopView
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<FormClient>());
+            //Application.Run(container.Resolve<FormAdmin>());
         }
 
         public static IUnityContainer BuildUnityContainer()

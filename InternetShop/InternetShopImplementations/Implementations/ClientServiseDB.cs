@@ -13,17 +13,17 @@ namespace InternetShopImplementations.Implementations
 {
     public class ClientServiceDB : IClientService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public ClientServiceDB(AbstractDbContext context)
+        public ClientServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }
 
         public List<ClientViewModel> GetList()
         {
-            List<ClientViewModel> result = context.Clients.Select(rec => new
-            ClientViewModel
+            List<ClientViewModel> result = context.Clients.Select(rec =>
+            new ClientViewModel
             {
                 Id = rec.Id,
                 Name = rec.Name,

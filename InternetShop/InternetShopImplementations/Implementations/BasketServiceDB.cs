@@ -11,31 +11,17 @@ namespace InternetShopImplementations.Implementations
 {
     public class BasketServiceDB : IBasketService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public BasketServiceDB(AbstractDbContext context)
+        public BasketServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }
 
         public List<ProductBasketViewModel> GetList(int index)
         {
-            //List<ProductViewModel> products = new List<ProductViewModel>();
-            List<ProductBasketViewModel> result = new List<ProductBasketViewModel>();
-            //for (int i = 0; i < source.Baskets[index].ProductsBasket.Count; i++)
-            {
-               // if (source.Baskets[index].ProductsBasket[i].ProductID == products.v)
-                //result.Add(new ProductBasketViewModel
-                //{
-                //    Id = source.Baskets[index].ProductsBasket[i].Id,
-                //    BasketID = source.Baskets[index].ProductsBasket[i].BasketID,
-                //    ProductID = source.Baskets[index].ProductsBasket[i].ProductID,
-                //    Count = source.Baskets[index].ProductsBasket[i].Count
-                //});
-            }
-            return result;
+            throw new NotImplementedException();
         }
-       
         public BasketViewModel GetElement(int id)
         {
             throw new NotImplementedException();
@@ -44,7 +30,6 @@ namespace InternetShopImplementations.Implementations
         {
             throw new NotImplementedException();
         }
-
         public List<BasketViewModel> GetBaskets()
         {
             throw new NotImplementedException();

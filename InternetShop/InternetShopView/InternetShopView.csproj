@@ -68,13 +68,6 @@
     <Compile Include="FormBasket.Designer.cs">
       <DependentUpon>FormBasket.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormClient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include=".Designer.cs">
-      <DependentUpon>FormClient.cs</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FormMainClient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,9 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormBasket.resx">
       <DependentUpon>FormBasket.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormClient.resx">
-      <DependentUpon>FormClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMainClient.resx">
       <DependentUpon>FormMainClient.cs</DependentUpon>

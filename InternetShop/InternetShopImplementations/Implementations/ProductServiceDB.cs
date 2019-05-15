@@ -12,9 +12,9 @@ namespace InternetShopImplementations.Implementations
 {
     public class ProductServiceDB : IProductService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public ProductServiceDB(AbstractDbContext context)
+        public ProductServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }
@@ -27,12 +27,12 @@ namespace InternetShopImplementations.Implementations
                 ProductName = rec.ProductName,
                 Price = rec.Price,
                 ProductsBasket = context.ProductsBasket
-                .Where(recPC => recPC.ProductID == rec.Id)
+                .Where(recPC => recPC.ProductId == rec.Id)
                 .Select(recPC => new ProductBasketViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductID,
-                    BasketID = recPC.BasketID,
+                    ProductID = recPC.ProductId,
+                    BasketID = recPC.BasketId,
                     Count = recPC.Count
                 }).ToList(),
 
@@ -60,12 +60,12 @@ namespace InternetShopImplementations.Implementations
                     ProductName = element.ProductName,
                     Price = element.Price,
                     ProductsBasket = context.ProductsBasket
-                .Where(recPC => recPC.ProductID == element.Id)
+                .Where(recPC => recPC.ProductId == element.Id)
                 .Select(recPC => new ProductBasketViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductID,
-                    BasketID = recPC.BasketID,
+                    ProductID = recPC.ProductId,
+                    BasketID = recPC.BasketId,
                     Count = recPC.Count
                 }).ToList(),
 

@@ -23,9 +23,9 @@ namespace InternetShopModel
         public int Price { get; set; }
         [Required]
         public int CountOfAvailable { get; set; }
-        [ForeignKey("ComponentID")]
+        [ForeignKey("ComponentId")]
         public virtual List<ComponentProduct> ComponentProducts { get; set; }
-        [ForeignKey("ComponentID")]
+        [ForeignKey("ComponentId")]
         public virtual List<RequestComponent> ComponentRequests { get; set; }
     }
 }
