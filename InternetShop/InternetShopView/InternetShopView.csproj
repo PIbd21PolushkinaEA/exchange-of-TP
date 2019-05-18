@@ -62,35 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormBasket.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormBasket.Designer.cs">
-      <DependentUpon>FormBasket.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormMainClient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMainClient.Designer.cs">
-      <DependentUpon>FormMainClient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormReport.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormReport.Designer.cs">
-      <DependentUpon>FormReport.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormBasket.resx">
-      <DependentUpon>FormBasket.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMainClient.resx">
-      <DependentUpon>FormMainClient.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormReport.resx">
-      <DependentUpon>FormReport.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

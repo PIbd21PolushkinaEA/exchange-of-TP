@@ -10,10 +10,9 @@ namespace InternetShopModel
 {
     public class Basket
     {
-        [ForeignKey ("Client")]
         public int Id { get; set; }
 
-        public int ClientID { get; set; }
+        public int ClientId { get; set; }
 
         [Required]
         public int CountOfChoosedProducts { get; set; }

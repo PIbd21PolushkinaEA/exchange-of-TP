@@ -28,9 +28,6 @@ namespace InternetShopView
         public static IUnityContainer BuildUnityContainer()
         {
             var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<IClientService, ClientServiceDB>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainClientServise, MainClientServiceDB>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IBasketService, BasketServiceDB>(new HierarchicalLifetimeManager());
 
             return currentContainer;
         }

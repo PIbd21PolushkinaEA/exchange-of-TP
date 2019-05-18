@@ -11,13 +11,13 @@ namespace InternetShopServiceDAL.Interfaces
     public interface IMainClientServise
     {
         //покупки
-        List<ProductViewModel> GetList();
+        List<BasketViewModel> GetList();
 
-        ProductViewModel GetElement(int id);
+        //ProductViewModel GetElement(int id);
 
-        void AddToBasket(ProductBindingModel model);
+        void AddToBasket(BasketBindingModel model);
 
-        void UpdProducts(ProductBindingModel model);
+        void MakeReservation(ProductBasketBindingModel model);
 
     }
 }

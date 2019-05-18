@@ -11,14 +11,14 @@ namespace InternetShopImplementations.Migrations
                 "dbo.Baskets",
                 c => new
                     {
-                        Id = c.Int(nullable: false),
-                        ClientID = c.Int(nullable: false),
+                        Id = c.Int(nullable: false, identity: true),
+                        ClientId = c.Int(nullable: false),
                         CountOfChoosedProducts = c.Int(nullable: false),
                         SumOfChoosedProducts = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Clients", t => t.Id)
-                .Index(t => t.Id);
+                .ForeignKey("dbo.Clients", t => t.ClientId, cascadeDelete: true)
+                .Index(t => t.ClientId);
             
             CreateTable(
                 "dbo.Clients",
@@ -28,7 +28,6 @@ namespace InternetShopImplementations.Migrations
                         Name = c.String(nullable: false),
                         Email = c.String(nullable: false),
                         Password = c.String(nullable: false),
-                        BasketId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -37,16 +36,16 @@ namespace InternetShopImplementations.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ProductID = c.Int(nullable: false),
-                        BasketID = c.Int(nullable: false),
+                        ProductId = c.Int(nullable: false),
+                        BasketId = c.Int(nullable: false),
                         Count = c.Int(nullable: false),
                         IsReserved = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Baskets", t => t.BasketID, cascadeDelete: true)
-                .ForeignKey("dbo.Products", t => t.ProductID, cascadeDelete: true)
-                .Index(t => t.ProductID)
-                .Index(t => t.BasketID);
+                .ForeignKey("dbo.Baskets", t => t.BasketId, cascadeDelete: true)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId)
+                .Index(t => t.BasketId);
             
             CreateTable(
                 "dbo.Products",
@@ -63,15 +62,15 @@ namespace InternetShopImplementations.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ComponentID = c.Int(nullable: false),
-                        ProductID = c.Int(nullable: false),
+                        ComponentId = c.Int(nullable: false),
+                        ProductId = c.Int(nullable: false),
                         Count = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Components", t => t.ComponentID, cascadeDelete: true)
-                .ForeignKey("dbo.Products", t => t.ProductID, cascadeDelete: true)
-                .Index(t => t.ComponentID)
-                .Index(t => t.ProductID);
+                .ForeignKey("dbo.Components", t => t.ComponentId, cascadeDelete: true)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ComponentId)
+                .Index(t => t.ProductId);
             
             CreateTable(
                 "dbo.Components",
@@ -92,15 +91,15 @@ namespace InternetShopImplementations.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ComponentID = c.Int(nullable: false),
-                        RequestID = c.Int(nullable: false),
-                        Count = c.Int(nullable: false),
+                        ComponentId = c.Int(nullable: false),
+                        RequestId = c.Int(nullable: false),
+                        CountComponents = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Components", t => t.ComponentID, cascadeDelete: true)
-                .ForeignKey("dbo.Requests", t => t.RequestID, cascadeDelete: true)
-                .Index(t => t.ComponentID)
-                .Index(t => t.RequestID);
+                .ForeignKey("dbo.Components", t => t.ComponentId, cascadeDelete: true)
+                .ForeignKey("dbo.Requests", t => t.RequestId, cascadeDelete: true)
+                .Index(t => t.ComponentId)
+                .Index(t => t.RequestId);
             
             CreateTable(
                 "dbo.Requests",
@@ -115,20 +114,20 @@ namespace InternetShopImplementations.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.ProductBaskets", "ProductID", "dbo.Products");
-            DropForeignKey("dbo.ComponentProducts", "ProductID", "dbo.Products");
-            DropForeignKey("dbo.RequestComponents", "RequestID", "dbo.Requests");
-            DropForeignKey("dbo.RequestComponents", "ComponentID", "dbo.Components");
-            DropForeignKey("dbo.ComponentProducts", "ComponentID", "dbo.Components");
-            DropForeignKey("dbo.ProductBaskets", "BasketID", "dbo.Baskets");
-            DropForeignKey("dbo.Baskets", "Id", "dbo.Clients");
-            DropIndex("dbo.RequestComponents", new[] { "RequestID" });
-            DropIndex("dbo.RequestComponents", new[] { "ComponentID" });
-            DropIndex("dbo.ComponentProducts", new[] { "ProductID" });
-            DropIndex("dbo.ComponentProducts", new[] { "ComponentID" });
-            DropIndex("dbo.ProductBaskets", new[] { "BasketID" });
-            DropIndex("dbo.ProductBaskets", new[] { "ProductID" });
-            DropIndex("dbo.Baskets", new[] { "Id" });
+            DropForeignKey("dbo.ProductBaskets", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.ComponentProducts", "ProductId", "dbo.Products");
+            DropForeignKey("dbo.RequestComponents", "RequestId", "dbo.Requests");
+            DropForeignKey("dbo.RequestComponents", "ComponentId", "dbo.Components");
+            DropForeignKey("dbo.ComponentProducts", "ComponentId", "dbo.Components");
+            DropForeignKey("dbo.ProductBaskets", "BasketId", "dbo.Baskets");
+            DropForeignKey("dbo.Baskets", "ClientId", "dbo.Clients");
+            DropIndex("dbo.RequestComponents", new[] { "RequestId" });
+            DropIndex("dbo.RequestComponents", new[] { "ComponentId" });
+            DropIndex("dbo.ComponentProducts", new[] { "ProductId" });
+            DropIndex("dbo.ComponentProducts", new[] { "ComponentId" });
+            DropIndex("dbo.ProductBaskets", new[] { "BasketId" });
+            DropIndex("dbo.ProductBaskets", new[] { "ProductId" });
+            DropIndex("dbo.Baskets", new[] { "ClientId" });
             DropTable("dbo.Requests");
             DropTable("dbo.RequestComponents");
             DropTable("dbo.Components");

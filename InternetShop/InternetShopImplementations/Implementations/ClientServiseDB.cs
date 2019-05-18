@@ -28,8 +28,7 @@ namespace InternetShopImplementations.Implementations
                 Id = rec.Id,
                 Name = rec.Name,
                 Email = rec.Email,
-                Password = rec.Password,
-                BasketID = rec.BasketId
+                Password = rec.Password
             })
             .ToList();
             return result;
@@ -46,8 +45,7 @@ namespace InternetShopImplementations.Implementations
                     Id = element.Id,
                     Name = element.Name,
                     Email = element.Email,
-                    Password = element.Password,
-                    BasketID = element.BasketId
+                    Password = element.Password
                 };
             }
             throw new Exception("Элемент не найден");

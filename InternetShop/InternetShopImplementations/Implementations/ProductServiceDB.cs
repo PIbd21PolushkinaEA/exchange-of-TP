@@ -34,8 +34,8 @@ namespace InternetShopImplementations.Implementations
                 .Select(recPC => new ProductBasketViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductId,
-                    BasketID = recPC.BasketId,
+                    ProductId = recPC.ProductId,
+                    BasketId = recPC.BasketId,
                     Count = recPC.Count
                 }).ToList(),
 
@@ -44,8 +44,8 @@ namespace InternetShopImplementations.Implementations
                 .Select(recPC => new ComponentProductViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductId,
-                    ComponentID = recPC.ComponentId,
+                    ProductId = recPC.ProductId,
+                    ComponentId = recPC.ComponentId,
                     Count = recPC.Count
                 }).ToList()
             }).ToList();
@@ -67,8 +67,8 @@ namespace InternetShopImplementations.Implementations
                 .Select(recPC => new ProductBasketViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductId,
-                    BasketID = recPC.BasketId,
+                    ProductId = recPC.ProductId,
+                    BasketId = recPC.BasketId,
                     Count = recPC.Count
                 }).ToList(),
 
@@ -77,8 +77,8 @@ namespace InternetShopImplementations.Implementations
                 .Select(recPC => new ComponentProductViewModel
                 {
                     Id = recPC.Id,
-                    ProductID = recPC.ProductId,
-                    ComponentID = recPC.ComponentId,
+                    ProductId = recPC.ProductId,
+                    ComponentId = recPC.ComponentId,
                     Count = recPC.Count
                 }).ToList()
                 };

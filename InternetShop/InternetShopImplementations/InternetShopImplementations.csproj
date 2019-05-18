@@ -49,20 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractWebDbContext.cs" />
-    <Compile Include="DataListSingleton.cs" />
     <Compile Include="Implementations\BasketServiceDB.cs" />
     <Compile Include="Implementations\ClientServiseDB.cs" />
     <Compile Include="Implementations\ComponentServiceDB.cs" />
     <Compile Include="Implementations\MainClientServiceDB.cs" />
     <Compile Include="Implementations\ProductServiceDB.cs" />
     <Compile Include="Implementations\RequestServiceDB.cs" />
-    <Compile Include="Migrations\201905131013168_FirstMigration.cs" />
-    <Compile Include="Migrations\201905131013168_FirstMigration.Designer.cs">
-      <DependentUpon>201905131013168_FirstMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905141300233_Second.cs" />
-    <Compile Include="Migrations\201905141300233_Second.Designer.cs">
-      <DependentUpon>201905141300233_Second.cs</DependentUpon>
+    <Compile Include="Migrations\201905181808017_FirstMigration.cs" />
+    <Compile Include="Migrations\201905181808017_FirstMigration.Designer.cs">
+      <DependentUpon>201905181808017_FirstMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,11 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905131013168_FirstMigration.resx">
-      <DependentUpon>201905131013168_FirstMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905141300233_Second.resx">
-      <DependentUpon>201905141300233_Second.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905181808017_FirstMigration.resx">
+      <DependentUpon>201905181808017_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
