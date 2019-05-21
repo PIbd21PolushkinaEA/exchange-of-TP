@@ -14,6 +14,8 @@ namespace InternetShopModel
 
         public int BasketId { get; set; }
 
+        public int ProductName { get; set; }
+
         public int Count { get; set; }
 
         public bool IsReserved { get; set; }

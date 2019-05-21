@@ -15,6 +15,9 @@ namespace InternetShopModel
         public int ClientId { get; set; }
 
         [Required]
+        public string NameBuy { get; set; }
+
+        [Required]
         public int CountOfChoosedProducts { get; set; }
 
         [Required]

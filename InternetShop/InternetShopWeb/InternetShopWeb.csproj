@@ -80,8 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FormClient.aspx" />
-    <Content Include="FormMainClient.aspx" />
     <Content Include="FormCreateBuy.aspx" />
+    <Content Include="FormMainClient.aspx" />
+    <Content Include="FormProduct.aspx" />
     <Content Include="FormProducts.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -94,6 +95,13 @@
     <Compile Include="FormClient.aspx.designer.cs">
       <DependentUpon>FormClient.aspx</DependentUpon>
     </Compile>
+    <Compile Include="FormCreateBuy.aspx.cs">
+      <DependentUpon>FormCreateBuy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormCreateBuy.aspx.designer.cs">
+      <DependentUpon>FormCreateBuy.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FormMainClient.aspx.cs">
       <DependentUpon>FormMainClient.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -101,12 +109,12 @@
     <Compile Include="FormMainClient.aspx.designer.cs">
       <DependentUpon>FormMainClient.aspx</DependentUpon>
     </Compile>
-    <Compile Include="FormCreateBuy.aspx.cs">
-      <DependentUpon>FormCreateBuy.aspx</DependentUpon>
+    <Compile Include="FormProduct.aspx.cs">
+      <DependentUpon>FormProduct.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="FormCreateBuy.aspx.designer.cs">
-      <DependentUpon>FormCreateBuy.aspx</DependentUpon>
+    <Compile Include="FormProduct.aspx.designer.cs">
+      <DependentUpon>FormProduct.aspx</DependentUpon>
     </Compile>
     <Compile Include="FormProducts.aspx.cs">
       <DependentUpon>FormProducts.aspx</DependentUpon>

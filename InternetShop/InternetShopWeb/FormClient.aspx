@@ -13,10 +13,10 @@
 
             <br />
             Имя&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <asp:TextBox ID="textBoxName" runat="server" Height="16px" Width="280px">ramis</asp:TextBox>
+        <asp:TextBox ID="textBoxName" runat="server" Height="16px" Width="280px">Zhenya</asp:TextBox>
             <br />
             <br />
-            Почта&nbsp;&nbsp;&nbsp; <asp:TextBox ID="textBoxEmail" runat="server" Height="16px" Width="280px">pixert</asp:TextBox>
+            Почта&nbsp;&nbsp;&nbsp; <asp:TextBox ID="textBoxEmail" runat="server" Height="16px" Width="280px">polushkina.evg@gmail.com</asp:TextBox>
             <br />
             <br />
             Пароль&nbsp;

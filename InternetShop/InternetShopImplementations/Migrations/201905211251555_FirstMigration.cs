@@ -13,6 +13,7 @@ namespace InternetShopImplementations.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ClientId = c.Int(nullable: false),
+                        NameBuy = c.String(nullable: false),
                         CountOfChoosedProducts = c.Int(nullable: false),
                         SumOfChoosedProducts = c.Int(nullable: false),
                     })
@@ -38,6 +39,7 @@ namespace InternetShopImplementations.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ProductId = c.Int(nullable: false),
                         BasketId = c.Int(nullable: false),
+                        ProductName = c.Int(nullable: false),
                         Count = c.Int(nullable: false),
                         IsReserved = c.Boolean(nullable: false),
                     })
@@ -64,6 +66,7 @@ namespace InternetShopImplementations.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ComponentId = c.Int(nullable: false),
                         ProductId = c.Int(nullable: false),
+                        ComponentName = c.String(),
                         Count = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)

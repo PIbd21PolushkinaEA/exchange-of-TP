@@ -16,10 +16,29 @@ namespace InternetShopWeb
 {
     public partial class FormMainClient : System.Web.UI.Page
     {
+        private readonly IMainClientServise service = UnityConfig.Container.Resolve<MainClientServiceDB>();
+
+        List<BasketViewModel> list;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            LoadData();
         }
+
+        private void LoadData()
+        {
+            try
+            {
+                list = service.GetList();
+                dataGridView1.Columns[0].Visible = false;
+                dataGridView1.Columns[1].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+            }
+        }
+
 
         protected void ButtonProduct_Click(object sender, EventArgs e)
         {
@@ -36,6 +55,11 @@ namespace InternetShopWeb
             Server.Transfer("FormCreateBuy.aspx");
         }
 
+        protected void ButtonUpdBuy_Click(object sender, EventArgs e)
+        {
+            Server.Transfer("FormCreateBuy.aspx");
+        }
+
         protected void ButtonMakeReservation_Click(object sender, EventArgs e)
         {
 
@@ -45,5 +69,7 @@ namespace InternetShopWeb
         {
 
         }
+
+
     }
 }

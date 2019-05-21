@@ -19,15 +19,15 @@
         <asp:Button ID="ButtonProduct" runat="server" Text="Доступные товары" OnClick="ButtonProduct_Click" />
         <asp:Button ID="ButtonReport" runat="server" Text="Отчет" OnClick="ButtonReport_Click" />&nbsp;<br />
         <asp:Button ID="ButtonCreateBuy" runat="server" Text="Выбрать покупку" OnClick="ButtonCreateBuy_Click" />
+        <asp:Button ID="ButtonUpdBuy" runat="server" Text="Изменить покупку" OnClick="ButtonUpdBuy_Click" />
         <asp:Button ID="ButtonMakeReservation" runat="server" Text="Зарезервировать" OnClick="ButtonMakeReservation_Click" />
         <asp:Button ID="ButtonUpd" runat="server" Text="Обновить список" OnClick="ButtonUpd_Click" />
         <asp:GridView ID="dataGridView1" runat="server" AutoGenerateColumns="False" DataSourceID="ObjectDataSource1" ShowHeaderWhenEmpty="True">
             <Columns>
                 <asp:BoundField DataField="Id" HeaderText="Id" SortExpression="Id" />
                 <asp:CommandField ShowSelectButton="true" SelectText=">>" />
-                <asp:BoundField DataField="ProductName" HeaderText="ProductName" SortExpression="ProductName" />
-                <asp:BoundField DataField="Count" HeaderText="Count" SortExpression="Count" />
-                <asp:BoundField DataField="Sum" HeaderText="Sum" SortExpression="Sum" />
+                <asp:BoundField DataField="NameBuy" HeaderText="NameBuy" SortExpression="NameBuy" />
+                <asp:BoundField DataField="SumOfChoosedProducts" HeaderText="Sum" SortExpression="SumOfChoosedProducts" />
             </Columns>
             <SelectedRowStyle BackColor="#CCCCCC" />
         </asp:GridView>
