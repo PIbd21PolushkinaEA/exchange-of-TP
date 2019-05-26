@@ -18,11 +18,7 @@ namespace InternetShopWeb
     {
         private readonly IProductService serviceS = UnityConfig.Container.Resolve<ProductServiceDB>();
 
-        private readonly IMainClientServise serviceM = UnityConfig.Container.Resolve<MainClientServiceDB>();
-
-        private List<ProductBasketViewModel> ProductBaskets;
-
-        private int id;
+        private ProductBasketViewModel model;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,21 +26,37 @@ namespace InternetShopWeb
             {
                 try
                 {
-                    List<ProductViewModel> listP = serviceS.GetList();
-                    if (listP != null)
+                    List<ProductViewModel> list = serviceS.GetList();
+                    if (list != null)
                     {
-                        DropDownListProduct.DataSource = listP;
-                        DropDownListProduct.DataBind();
-                        DropDownListProduct.DataTextField = "ProductName";
+                        DropDownListProduct.DataSource = list;
                         DropDownListProduct.DataValueField = "Id";
+                        DropDownListProduct.DataTextField = "ProductName";
+                        DropDownListProduct.SelectedIndex = -1;
+                        Page.DataBind();
                     }
-                    Page.DataBind();
 
                 }
                 catch (Exception ex)
                 {
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
                 }
+            }
+            if (Session["SEId"] != null)
+            {
+                model = new ProductBasketViewModel
+                {
+                    ProductId = Convert.ToInt32(Session["SEProductId"]),
+                    ProductName = Session["SEProductName"].ToString(),
+                    Count = Convert.ToInt32(Session["SECount"].ToString())
+                };
+                DropDownListProduct.Enabled = false;
+                DropDownListProduct.SelectedValue = Session["SEProductId"].ToString();
+            }
+
+            if ((Session["SEId"] != null) && (!Page.IsPostBack))
+            {
+                TextBoxCount.Text = Session["SECount"].ToString();
             }
         }
         private void CalcSum()
@@ -83,61 +95,44 @@ namespace InternetShopWeb
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Выберите товар');</script>");
                 return;
             }
-            //try
-            //{
-            //    serviceM.AddToBasket(new BasketBindingModel
-            //    {
-            //        ClientId = Convert.ToInt32(DropDownListProduct.SelectedValue),
-            //        CountOfChoosedProducts = Convert.ToInt32(TextBoxCount.Text),
-            //        SumOfChoosedProducts = Convert.ToInt32(TextBoxSum.Text)
-            //    });
-            //    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Сохранение прошло успешно');</script>");
             try
             {
-                List<ProductBasketBindingModel> productBasketBM = new List<ProductBasketBindingModel>();
-                for (int i = 0; i < ProductBaskets.Count; ++i)
+                if (Session["SEId"] == null)
                 {
-                    productBasketBM.Add(new ProductBasketBindingModel
+                    model = new ProductBasketViewModel
                     {
-                        Id = ProductBaskets[i].Id,
-                        BasketId = ProductBaskets[i].BasketId,
-                        ProductId = ProductBaskets[i].ProductId
-                    });
+                        ProductId = Convert.ToInt32(DropDownListProduct.SelectedValue),
+                        ProductName = DropDownListProduct.SelectedItem.Text,
+                        Count = Convert.ToInt32(TextBoxCount.Text)
+                    };
+                    Session["SEId"] = model.Id;
+                    Session["SEBasketId"] = model.BasketId;
+                    Session["SEProductId"] = model.ProductId;
+                    Session["SEProductName"] = model.ProductName;
+                    Session["SECount"] = model.Count;
                 }
-                //if (Int32.TryParse((string)Session["id"], out id))
-                //{
-                //    serviceM.UpdElement(new SetBindingModel
-                //    {
-                //        Id = id,
-                //        SetName = textBoxName.Text,
-                //        Price = Convert.ToInt32(textBoxPrice.Text),
-                //        SetParts = setPartBM
-                //    });
-                //}
-                //else
-                //{
-                //    service.AddElement(new SetBindingModel
-                //    {
-                //        SetName = textBoxName.Text,
-                //        Price = Convert.ToInt32(textBoxPrice.Text),
-                //        SetParts = setPartBM
-                //    });
-                //}
-                //Session["id"] = null;
-                //Session["Change"] = null;
+                else
+                {
+                    model.Count = Convert.ToInt32(TextBoxCount.Text);
+                    Session["SEId"] = model.Id;
+                    Session["SEBasketId"] = model.BasketId;
+                    Session["SEProductId"] = model.ProductId;
+                    Session["SEProductName"] = model.ProductName;
+                    Session["SECount"] = model.Count;
+                    Session["Change"] = "1";
+                }
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Сохранение прошло успешно');</script>");
-                Server.Transfer("FormMainClient.aspx");
+                Server.Transfer("FormCreateBuy.aspx");
             }
             catch (Exception ex)
             {
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
-
             }
         }
 
         protected void ButtonCancel_Click(object sender, EventArgs e)
         {
-            Server.Transfer("FormMainClient.aspx");
+            Server.Transfer("FormCreateBuy.aspx");
         }
     }
 }

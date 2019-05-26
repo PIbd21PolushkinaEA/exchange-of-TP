@@ -65,6 +65,7 @@ namespace InternetShopWeb
                 {
                     if (client.Email.Equals(email) && client.Password.Equals(password))
                     {
+                        Session["ClientId"] = client.Id.ToString();
                         Server.Transfer("FormMainClient.aspx");
                     }
                     else Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Нет такого пользователя');</script>");

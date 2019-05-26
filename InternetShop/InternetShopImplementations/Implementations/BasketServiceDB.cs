@@ -17,7 +17,6 @@ namespace InternetShopImplementations.Implementations
         {
             this.context = context;
         }
-
         public List<ProductBasketViewModel> GetList(int index)
         {
             throw new NotImplementedException();
@@ -34,10 +33,6 @@ namespace InternetShopImplementations.Implementations
         {
             throw new NotImplementedException();
         }
-
-
-
-
         public void UpdElement(BasketBindingModel model)
         {
             throw new NotImplementedException();

@@ -39,7 +39,7 @@ namespace InternetShopImplementations.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ProductId = c.Int(nullable: false),
                         BasketId = c.Int(nullable: false),
-                        ProductName = c.Int(nullable: false),
+                        ProductName = c.String(),
                         Count = c.Int(nullable: false),
                         IsReserved = c.Boolean(nullable: false),
                     })

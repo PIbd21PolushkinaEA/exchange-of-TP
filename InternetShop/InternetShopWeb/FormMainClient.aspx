@@ -31,7 +31,7 @@
             </Columns>
             <SelectedRowStyle BackColor="#CCCCCC" />
         </asp:GridView>
-        <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" DeleteMethod="MakeReservation" InsertMethod="CreateBuy" SelectMethod="GetList" TypeName="InternetShopImplementations.Implementations.MainClientServiceDB" >
+        <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" DeleteMethod="MakeReservation" InsertMethod="CreateBuy" SelectMethod="GetList" TypeName="InternetShopImplementations.Implementations.MainClientServiceDB" UpdateMethod="UpdBuy">
             <DeleteParameters>
                 <asp:Parameter Name="id" Type="Int32" />
             </DeleteParameters>

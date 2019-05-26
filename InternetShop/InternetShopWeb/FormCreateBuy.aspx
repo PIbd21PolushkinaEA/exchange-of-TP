@@ -12,7 +12,7 @@
         <div>
     
         Название
-        <asp:TextBox ID="textBoxName" runat="server" Width="200px"></asp:TextBox>
+        <asp:TextBox ID="textBoxName" runat="server" Width="200px" OnTextChanged="textBoxName_TextChanged"></asp:TextBox>
         <br />
         <br />
         Цена&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

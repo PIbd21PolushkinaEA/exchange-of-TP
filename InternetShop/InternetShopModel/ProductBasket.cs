@@ -14,7 +14,7 @@ namespace InternetShopModel
 
         public int BasketId { get; set; }
 
-        public int ProductName { get; set; }
+        public string ProductName { get; set; }
 
         public int Count { get; set; }
 

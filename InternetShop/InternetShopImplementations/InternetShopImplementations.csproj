@@ -55,9 +55,9 @@
     <Compile Include="Implementations\MainClientServiceDB.cs" />
     <Compile Include="Implementations\ProductServiceDB.cs" />
     <Compile Include="Implementations\RequestServiceDB.cs" />
-    <Compile Include="Migrations\201905211251555_FirstMigration.cs" />
-    <Compile Include="Migrations\201905211251555_FirstMigration.Designer.cs">
-      <DependentUpon>201905211251555_FirstMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201905261430464_FirstMigration.cs" />
+    <Compile Include="Migrations\201905261430464_FirstMigration.Designer.cs">
+      <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,8 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905211251555_FirstMigration.resx">
-      <DependentUpon>201905211251555_FirstMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905261430464_FirstMigration.resx">
+      <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

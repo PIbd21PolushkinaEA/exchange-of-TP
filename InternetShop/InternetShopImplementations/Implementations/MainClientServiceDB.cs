@@ -80,20 +80,6 @@ namespace InternetShopImplementations.Implementations
 
         public void AddElement(BasketBindingModel model)
         {
-            //context.Baskets.Add(new Basket
-            //{
-            //    ClientId = model.ClientId,
-            //    CountOfChoosedProducts = model.CountOfChoosedProducts,
-            //    SumOfChoosedProducts = model.SumOfChoosedProducts
-            //});
-
-            //context.ProductsBasket.Add(new ProductBasket
-            //{
-            //    BasketId = model.Id,
-            //    ProductId = model.Id
-            //});
-
-            //context.SaveChanges();
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
@@ -121,6 +107,7 @@ namespace InternetShopImplementations.Implementations
                             ProductId = rec.Key,
                             Count = rec.Sum(r => r.Count)
                         });
+                    //// подумой!
                     // добавляем компоненты  
                     foreach (var groupProduct in groupProducts)
                     {
@@ -161,14 +148,14 @@ namespace InternetShopImplementations.Implementations
                         throw new Exception("Элемент не найден");
                     }
                     element.NameBuy = model.NameBuy;
-                    //element.Price = model.Price;
+                    element.SumOfChoosedProducts = model.SumOfChoosedProducts;
                     context.SaveChanges();
 
                     // обновляем существуюущие компоненты 
                     var compIds = model.ProductsBasket.Select(rec => rec.ProductId).Distinct();
-                    var updateParts = context.ProductsBasket.Where(rec =>
+                    var updateProducts = context.ProductsBasket.Where(rec =>
                     rec.BasketId == model.Id && compIds.Contains(rec.ProductId));
-                    foreach (var updatePart in updateParts)
+                    foreach (var updatePart in updateProducts)
                     {
                         updatePart.Count = model.ProductsBasket.FirstOrDefault(rec =>
                         rec.Id == updatePart.Id).Count;
@@ -178,20 +165,19 @@ namespace InternetShopImplementations.Implementations
                     rec.BasketId == model.Id && !compIds.Contains(rec.ProductId)));
                     context.SaveChanges();
                     // новые записи  
-                    var groupParts = model.ProductsBasket.Where(rec =>
+                    var groupProducts = model.ProductsBasket.Where(rec =>
                     rec.Id == 0).GroupBy(rec => rec.ProductId).Select(rec => new
                     {
                         ProductId = rec.Key,
                         Count = rec.Sum(r => r.Count)
                     });
-                    foreach (var groupPart in groupParts)
-
+                    foreach (var groupProduct in groupProducts)
                     {
                         ProductBasket elementPC = context.ProductsBasket.FirstOrDefault(rec =>
-                        rec.BasketId == model.Id && rec.ProductId == groupPart.ProductId);
+                        rec.BasketId == model.Id && rec.ProductId == groupProduct.ProductId);
                         if (elementPC != null)
                         {
-                            elementPC.Count += groupPart.Count;
+                            elementPC.Count += groupProduct.Count;
                             context.SaveChanges();
                         }
                         else
@@ -199,8 +185,8 @@ namespace InternetShopImplementations.Implementations
                             context.ProductsBasket.Add(new ProductBasket
                             {
                                 BasketId = model.Id,
-                                ProductId = groupPart.ProductId,
-                                Count = groupPart.Count
+                                ProductId = groupProduct.ProductId,
+                                Count = groupProduct.Count
                             });
                             context.SaveChanges();
                         }
@@ -214,6 +200,34 @@ namespace InternetShopImplementations.Implementations
                 }
             }
         }
+        public void DelElement(int id)
+        {
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    Basket element = context.Baskets.FirstOrDefault(rec => rec.Id == id);
+                    if (element != null)
+                    {                         // удаяем записи по компонентам при удалении изделия  
+                        context.ProductsBasket.RemoveRange(context.ProductsBasket.Where(rec =>
+                        rec.BasketId == id));
+                        context.Baskets.Remove(element);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
         public void MakeReservation(ProductBasketBindingModel model)
         {
             ProductBasket element = context.ProductsBasket.FirstOrDefault(rec =>
