@@ -62,8 +62,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAdminMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAdminMain.Designer.cs">
+      <DependentUpon>FormAdminMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormComponent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormComponent.Designer.cs">
+      <DependentUpon>FormComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormComponents.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormComponents.Designer.cs">
+      <DependentUpon>FormComponents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRequest.Designer.cs">
+      <DependentUpon>FormRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormAdminMain.resx">
+      <DependentUpon>FormAdminMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormComponent.resx">
+      <DependentUpon>FormComponent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormComponents.resx">
+      <DependentUpon>FormComponents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormRequest.resx">
+      <DependentUpon>FormRequest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -100,6 +136,9 @@
       <Project>{ac266a41-1a11-476c-9df8-7e60acb40e1d}</Project>
       <Name>InternetShopServiceDAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
