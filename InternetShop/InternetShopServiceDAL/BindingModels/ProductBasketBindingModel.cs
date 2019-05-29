@@ -8,9 +8,16 @@ namespace InternetShopServiceDAL.BindingModels
 {
     public class ProductBasketBindingModel
     {
-        public int ProductID { get; set; }
-        public int BasketID { get; set; }
+        public int Id { get; set; }
+
+        public int ProductId { get; set; }
+
+        public int BasketId { get; set; }
+
+        public string ProductName { get; set; }
+
         public int Count { get; set; }
+
         public bool IsReserved { get; set; }
     }
 }

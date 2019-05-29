@@ -15,7 +15,7 @@ namespace InternetShopModel
         [Required]
         public DateTime Date { get; set; }
 
-        [ForeignKey("RequestID")]
+        [ForeignKey("RequestId")]
         public virtual List<RequestComponent> RequestComponents { get; set; }
     }
 }

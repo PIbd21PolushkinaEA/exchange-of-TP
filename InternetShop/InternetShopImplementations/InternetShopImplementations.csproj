@@ -48,9 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractDbContext.cs" />
+    <Compile Include="AbstractWebDbContext.cs" />
+    <Compile Include="Implementations\BasketServiceDB.cs" />
     <Compile Include="Implementations\ClientServiseDB.cs" />
     <Compile Include="Implementations\ComponentServiceDB.cs" />
+    <Compile Include="Implementations\MainClientServiceDB.cs" />
+    <Compile Include="Implementations\ProductServiceDB.cs" />
+    <Compile Include="Implementations\RequestServiceDB.cs" />
+    <Compile Include="Migrations\201905261430464_FirstMigration.cs" />
+    <Compile Include="Migrations\201905261430464_FirstMigration.Designer.cs">
+      <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,8 +73,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201905261430464_FirstMigration.resx">
+      <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

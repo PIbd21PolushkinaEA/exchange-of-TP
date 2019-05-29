@@ -9,6 +9,6 @@ namespace InternetShopServiceDAL.BindingModels {
         public int Id { get; set; }
         public int ComponentID { get; set; }
         public int RequestID { get; set; }
-        public int Count { get; set; }
+        public int CountCompoments { get; set; }
     }
 }

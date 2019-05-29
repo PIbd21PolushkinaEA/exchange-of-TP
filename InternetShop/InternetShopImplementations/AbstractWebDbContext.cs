@@ -7,9 +7,9 @@ using System.Data.Entity;
 using InternetShopModel;
 namespace InternetShopImplementations
 {
-    public class AbstractDbContext : DbContext
+    public class AbstractWebDbContext : DbContext
     {
-        public AbstractDbContext() : base("AbstractDatabase")
+        public AbstractWebDbContext() : base("AbstractWebDbContext")
         {
             //настройки конфигурации для entity            
             Configuration.ProxyCreationEnabled = false;
@@ -31,8 +31,6 @@ namespace InternetShopImplementations
         public virtual DbSet<ProductBasket> ProductsBasket { get; set; }
 
         public virtual DbSet<RequestComponent> RequestComponents { get; set; }
-
-
-
+        
     }
 }

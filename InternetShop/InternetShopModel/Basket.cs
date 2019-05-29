@@ -12,7 +12,10 @@ namespace InternetShopModel
     {
         public int Id { get; set; }
 
-        public int ClientID { get; set; }
+        public int ClientId { get; set; }
+
+        [Required]
+        public string NameBuy { get; set; }
 
         [Required]
         public int CountOfChoosedProducts { get; set; }
@@ -22,7 +25,7 @@ namespace InternetShopModel
 
         public virtual Client Client { get; set; }
 
-        [ForeignKey("BasketID")]
+        [ForeignKey("BasketId")]
         public virtual List<ProductBasket> ProductsBasket { get; set; }
 
     }

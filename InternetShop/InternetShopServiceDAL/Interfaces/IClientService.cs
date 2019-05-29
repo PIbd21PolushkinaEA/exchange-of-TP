@@ -15,9 +15,6 @@ namespace InternetShopServiceDAL.Interfaces
         ClientViewModel GetElement(string email, string password);
 
         void AddElement(ClientBindingModel model);
-
-        void UpdElement(ClientBindingModel model);
-
-        void DelElement(int id);
+        
     }
 }
