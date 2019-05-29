@@ -52,6 +52,7 @@
     <Compile Include="Interfaces\IBasketService.cs" />
     <Compile Include="Interfaces\IClientService.cs" />
     <Compile Include="Interfaces\IComponentService.cs" />
+    <Compile Include="Interfaces\IMainAdmin.cs" />
     <Compile Include="Interfaces\IMainClient.cs" />
     <Compile Include="Interfaces\IProductService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
