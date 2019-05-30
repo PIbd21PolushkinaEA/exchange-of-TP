@@ -12,15 +12,15 @@ namespace InternetShopImplementations.Implementations
 {
     public class ProductServiceDB : IProductService
     {
-        private AbstractWebDbContext context;
+        private AbstractDbContext context;
 
-        public ProductServiceDB(AbstractWebDbContext context)
+        public ProductServiceDB(AbstractDbContext context)
         {
             this.context = context;
         }
         public ProductServiceDB()
         {
-            this.context = new AbstractWebDbContext();
+            this.context = new AbstractDbContext();
         }
         public List<ProductViewModel> GetList()
         {

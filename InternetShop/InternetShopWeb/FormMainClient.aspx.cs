@@ -64,7 +64,20 @@ namespace InternetShopWeb
 
         protected void ButtonMakeReservation_Click(object sender, EventArgs e)
         {
-
+            if (dataGridView1.SelectedIndex >= 0)
+            {
+                try
+                {
+                    int id = list[dataGridView1.SelectedIndex].Id;
+                    service.MakeReservation(new BasketBindingModel { Id = id });
+                    LoadData();
+                    Server.Transfer("FormMainClient.aspx");
+                }
+                catch (Exception ex)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+                }
+            }
         }
 
         protected void ButtonUpd_Click(object sender, EventArgs e)

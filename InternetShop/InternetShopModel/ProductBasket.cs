@@ -18,8 +18,6 @@ namespace InternetShopModel
 
         public int Count { get; set; }
 
-        public bool IsReserved { get; set; }
-
         public virtual Product Product { get; set; }
 
         public virtual Basket Basket { get; set; }

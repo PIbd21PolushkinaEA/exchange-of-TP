@@ -7,9 +7,9 @@ using System.Data.Entity;
 using InternetShopModel;
 namespace InternetShopImplementations
 {
-    public class AbstractWebDbContext : DbContext
+    public class AbstractDbContext : DbContext
     {
-        public AbstractWebDbContext() : base("AbstractWebDbContext")
+        public AbstractDbContext() : base("AbstractWebDbContext")
         {
             //настройки конфигурации для entity            
             Configuration.ProxyCreationEnabled = false;

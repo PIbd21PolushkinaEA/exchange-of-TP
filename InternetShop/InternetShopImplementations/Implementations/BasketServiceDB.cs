@@ -11,9 +11,9 @@ namespace InternetShopImplementations.Implementations
 {
     public class BasketServiceDB : IBasketService
     {
-        private AbstractWebDbContext context;
+        private AbstractDbContext context;
 
-        public BasketServiceDB(AbstractWebDbContext context)
+        public BasketServiceDB(AbstractDbContext context)
         {
             this.context = context;
         }

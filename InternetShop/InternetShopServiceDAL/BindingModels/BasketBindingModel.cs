@@ -18,6 +18,8 @@ namespace InternetShopServiceDAL.BindingModels
 
         public int SumOfChoosedProducts { get; set; }
 
+        public bool IsReserved { get; set; }
+
         public List<ProductBasketBindingModel> ProductsBasket { get; set; }
     }
 }

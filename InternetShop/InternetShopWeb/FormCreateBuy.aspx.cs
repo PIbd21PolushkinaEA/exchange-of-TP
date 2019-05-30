@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using InternetShopServiceDAL.BindingModels;
@@ -10,7 +9,6 @@ using InternetShopServiceDAL.ViewModel;
 using InternetShopImplementations.Implementations;
 using Unity;
 using InternetShopWeb.App_Start;
-using InternetShopServiceDAL;
 using System.Drawing;
 
 namespace InternetShopWeb
@@ -18,6 +16,8 @@ namespace InternetShopWeb
     public partial class FormCreateBuy : System.Web.UI.Page
     {
         private readonly IMainClientServise service = UnityConfig.Container.Resolve<MainClientServiceDB>();
+
+        private readonly IProductService productService = UnityConfig.Container.Resolve<ProductServiceDB>();
 
         private int id;
 
@@ -123,6 +123,15 @@ namespace InternetShopWeb
                     Session["Change"] = "0";
                 }
             }
+
+            int Sum = 0;
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+
+                Sum += Int32.Parse(dataGridView.Rows[i].Cells[1].Text);
+
+            }
+
             LoadData();
         }
         private void LoadData()
@@ -136,9 +145,15 @@ namespace InternetShopWeb
                     dataGridView.DataBind();
                     dataGridView.ShowHeaderWhenEmpty = true;
                     dataGridView.SelectedRowStyle.BackColor = Color.Silver;
-                    dataGridView.Columns[1].Visible = false;
-                    dataGridView.Columns[2].Visible = false;
-                    dataGridView.Columns[3].Visible = false;
+                    //dataGridView.Columns[1].Visible = false;
+                    //dataGridView.Columns[2].Visible = false;
+                    //dataGridView.Columns[3].Visible = false;
+                }
+                textBoxPrice.Text = "0";
+                foreach (var product in ProductsBasket)
+                {
+                    ProductViewModel productView = productService.GetElement(product.ProductId);
+                    textBoxPrice.Text = (Convert.ToInt32(textBoxPrice.Text)+(productView.Price * product.Count)).ToString();
                 }
             }
             catch (Exception ex)
@@ -271,30 +286,5 @@ namespace InternetShopWeb
             e.Row.Cells[2].Visible = false;
             e.Row.Cells[3].Visible = false;
         }
-
-        protected void textBoxName_TextChanged(object sender, EventArgs e)
-        {
-            CalcSum();
-        }
-
-        private void CalcSum()
-        {
-            if (!string.IsNullOrEmpty(textBoxName.Text))
-            {
-                try
-                {
-                    //model = service.GetElement(id).ProductsBasket[dataGridView.SelectedIndex];
-                    //int id = Convert.ToInt32(dataGridView[0, 0].Value);
-                    //ProductViewModel product = serviceS.GetElement(id);
-                    //int count = Convert.ToInt32(TextBoxCount.Text);
-                    //TextBoxSum.Text = (count * product.Price).ToString();
-                }
-                catch (Exception ex)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
-                }
-            }
-        }
-
     }
 }

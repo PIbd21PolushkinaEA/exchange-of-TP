@@ -12,16 +12,16 @@ namespace InternetShopImplementations.Implementations
 {
     public class MainClientServiceDB : IMainClientServise
     {
-        private AbstractWebDbContext context;
+        private AbstractDbContext context;
 
-        public MainClientServiceDB(AbstractWebDbContext context)
+        public MainClientServiceDB(AbstractDbContext context)
         {
             this.context = context;
         }
 
         public MainClientServiceDB()
         {
-            this.context = new AbstractWebDbContext();
+            this.context = new AbstractDbContext();
         }
 
         public List<BasketViewModel> GetList()
@@ -34,6 +34,7 @@ namespace InternetShopImplementations.Implementations
                 NameBuy = rec.NameBuy,
                 CountOfChoosedProducts = rec.CountOfChoosedProducts,
                 SumOfChoosedProducts = rec.SumOfChoosedProducts,
+                IsReserved = rec.IsReserved,
                 ProductsBasket = context.ProductsBasket
                     .Where(recPC => recPC.BasketId == rec.Id)
                     .Select(recPC => new ProductBasketViewModel
@@ -42,9 +43,7 @@ namespace InternetShopImplementations.Implementations
                         ProductId = recPC.ProductId,
                         BasketId = recPC.BasketId,
                         ProductName = recPC.Product.ProductName,
-                        Count = recPC.Count,
-                        IsReserved = recPC.IsReserved
-
+                        Count = recPC.Count
                     }).ToList()
             }).ToList();
             return result;
@@ -62,6 +61,7 @@ namespace InternetShopImplementations.Implementations
                     NameBuy = element.NameBuy,
                     CountOfChoosedProducts = element.CountOfChoosedProducts,
                     SumOfChoosedProducts = element.SumOfChoosedProducts,
+                    IsReserved = element.IsReserved,
                     ProductsBasket = context.ProductsBasket
                     .Where(recPC => recPC.BasketId == element.Id)
                     .Select(recPC => new ProductBasketViewModel
@@ -95,7 +95,8 @@ namespace InternetShopImplementations.Implementations
                         ClientId = model.ClientId,
                         NameBuy = model.NameBuy,
                         CountOfChoosedProducts = model.CountOfChoosedProducts,
-                        SumOfChoosedProducts = model.SumOfChoosedProducts
+                        SumOfChoosedProducts = model.SumOfChoosedProducts,
+                        IsReserved = model.IsReserved
                     };
                     context.Baskets.Add(element);
                     context.SaveChanges();
@@ -228,25 +229,43 @@ namespace InternetShopImplementations.Implementations
             }
         }
 
-        public void MakeReservation(ProductBasketBindingModel model)
+        public void MakeReservation(BasketBindingModel model)
         {
-            ProductBasket element = context.ProductsBasket.FirstOrDefault(rec =>
-            rec.ProductId == model.ProductId && rec.BasketId == model.BasketId);
-            if (element != null)
+            using (var transaction = context.Database.BeginTransaction())
             {
-                element.IsReserved = model.IsReserved;
-            }
-            else
-            {
-                context.ProductsBasket.Add(new ProductBasket
+                try
                 {
-                    ProductId = model.ProductId,
-                    BasketId = model.BasketId,
-                    Count = model.Count,
-                    IsReserved = model.IsReserved
-                });
+                    Basket element = context.Baskets.FirstOrDefault(rec => rec.Id == model.Id);
+                    if (element == null)
+                    {
+                        throw new Exception("Элемент не найден");
+                    }
+
+                    //var productsBasket = context.ProductsBasket.Include(rec => rec.Product).Where(rec => rec.BasketId == element.Id);
+                    //// списываем   
+                    //foreach (var setPart in setParts)
+                    //{
+                    //    int countOnStorages = setPart.Count * element.Count;
+                    //    var storageParts = context.StorageParts.Where(rec =>
+                    //    rec.PartId == setPart.PartId);
+
+                    //    if (countOnStorages > 0)
+                    //    {
+                    //        throw new Exception("Не достаточно компонента " +
+                    //            setPart.Part.PartName + " требуется " + setPart.Count + ", не хватает " + countOnStorages);
+                    //    }
+                    //}
+                    //element.DateImplement = DateTime.Now;
+                    //element.Status = ProcedureStatus.Выполняется;
+                    context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
-            context.SaveChanges();
         }
     }
 }

@@ -69,6 +69,7 @@ namespace InternetShopWeb
                     ProductViewModel product = serviceS.GetElement(id);
                     int count = Convert.ToInt32(TextBoxCount.Text);
                     TextBoxSum.Text = (count * product.Price).ToString();
+
                 }
                 catch (Exception ex)
                 {

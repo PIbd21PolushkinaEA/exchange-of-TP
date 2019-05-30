@@ -28,6 +28,7 @@
                 <asp:CommandField ShowSelectButton="true" SelectText=">>" />
                 <asp:BoundField DataField="NameBuy" HeaderText="NameBuy" SortExpression="NameBuy" />
                 <asp:BoundField DataField="SumOfChoosedProducts" HeaderText="Sum" SortExpression="SumOfChoosedProducts" />
+                <asp:BoundField DataField="IsReserved" HeaderText="IsReserved" SortExpression="IsReserved" />
             </Columns>
             <SelectedRowStyle BackColor="#CCCCCC" />
         </asp:GridView>

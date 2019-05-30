@@ -13,9 +13,9 @@ namespace InternetShopImplementations.Implementations
 {
     public class RequestServiceDB : IRequestService
     {
-        private AbstractWebDbContext context;
+        private AbstractDbContext context;
         
-        public RequestServiceDB(AbstractWebDbContext context)
+        public RequestServiceDB(AbstractDbContext context)
         {
             this.context = context;
         }

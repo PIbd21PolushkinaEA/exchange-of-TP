@@ -23,6 +23,8 @@ namespace InternetShopModel
         [Required]
         public int SumOfChoosedProducts { get; set; }
 
+        public bool IsReserved { get; set; }
+
         public virtual Client Client { get; set; }
 
         [ForeignKey("BasketId")]

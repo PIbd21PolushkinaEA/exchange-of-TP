@@ -21,7 +21,7 @@ namespace InternetShopServiceDAL.Interfaces
 
         void DelElement(int id);
 
-        void MakeReservation(ProductBasketBindingModel model);
+        void MakeReservation(BasketBindingModel model);
 
     }
 }

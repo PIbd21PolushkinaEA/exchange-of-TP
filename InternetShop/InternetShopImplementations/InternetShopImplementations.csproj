@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractWebDbContext.cs" />
+    <Compile Include="AbstractDbContext.cs" />
     <Compile Include="Implementations\BasketServiceDB.cs" />
     <Compile Include="Implementations\ClientServiseDB.cs" />
     <Compile Include="Implementations\ComponentServiceDB.cs" />
@@ -58,6 +58,10 @@
     <Compile Include="Migrations\201905261430464_FirstMigration.cs" />
     <Compile Include="Migrations\201905261430464_FirstMigration.Designer.cs">
       <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905301817338_Migration_2.cs" />
+    <Compile Include="Migrations\201905301817338_Migration_2.Designer.cs">
+      <DependentUpon>201905301817338_Migration_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +85,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201905261430464_FirstMigration.resx">
       <DependentUpon>201905261430464_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905301817338_Migration_2.resx">
+      <DependentUpon>201905301817338_Migration_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
