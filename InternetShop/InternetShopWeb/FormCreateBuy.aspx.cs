@@ -25,6 +25,8 @@ namespace InternetShopWeb
 
         private ProductBasketViewModel model;
 
+        private int price;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Int32.TryParse((string)Session["id"], out id))
@@ -102,7 +104,7 @@ namespace InternetShopWeb
             {
                 if (Int32.TryParse((string)Session["id"], out id))
                 {
-                    service.UpdElement(new BasketBindingModel
+                    service.UpdBuy(new BasketBindingModel
                     {
                         Id = id,
                         NameBuy = "Введите название",
@@ -112,7 +114,7 @@ namespace InternetShopWeb
                 }
                 else
                 {
-                    service.AddElement(new BasketBindingModel
+                    service.AddBuy(new BasketBindingModel
                     {
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = "Введите название",
@@ -122,14 +124,6 @@ namespace InternetShopWeb
                     Session["id"] = service.GetList().Last().Id.ToString();
                     Session["Change"] = "0";
                 }
-            }
-
-            int Sum = 0;
-            for (int i = 0; i < dataGridView.Rows.Count; i++)
-            {
-
-                Sum += Int32.Parse(dataGridView.Rows[i].Cells[1].Text);
-
             }
 
             LoadData();
@@ -145,9 +139,6 @@ namespace InternetShopWeb
                     dataGridView.DataBind();
                     dataGridView.ShowHeaderWhenEmpty = true;
                     dataGridView.SelectedRowStyle.BackColor = Color.Silver;
-                    //dataGridView.Columns[1].Visible = false;
-                    //dataGridView.Columns[2].Visible = false;
-                    //dataGridView.Columns[3].Visible = false;
                 }
                 textBoxPrice.Text = "0";
                 foreach (var product in ProductsBasket)
@@ -236,22 +227,24 @@ namespace InternetShopWeb
                 }
                 if (Int32.TryParse((string)Session["id"], out id))
                 {
-                    service.UpdElement(new BasketBindingModel
+                    service.UpdBuy(new BasketBindingModel
                     {
                         Id = id,
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = textBoxName.Text,
                         SumOfChoosedProducts = Convert.ToInt32(textBoxPrice.Text),
+                        IsReserved = false,
                         ProductsBasket = productBasketBM
                     });
                 }
                 else
                 {
-                    service.AddElement(new BasketBindingModel
+                    service.AddBuy(new BasketBindingModel
                     {
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = textBoxName.Text,
                         SumOfChoosedProducts = Convert.ToInt32(textBoxPrice.Text),
+                        IsReserved = false,
                         ProductsBasket = productBasketBM
                     });
                 }
@@ -270,11 +263,11 @@ namespace InternetShopWeb
         {
             if (service.GetList().Count != 0 && service.GetList().Last().NameBuy == null)
             {
-                service.DelElement(service.GetList().Last().Id);
+                service.DelBuy(service.GetList().Last().Id);
             }
             if (!String.Equals(Session["Change"], null))
             {
-                service.DelElement(id);
+                service.DelBuy(id);
             }
             Session["id"] = null;
             Session["Change"] = null;

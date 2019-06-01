@@ -4,9 +4,10 @@ using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 
 namespace InternetShopImplementations.Implementations
 {
@@ -35,6 +36,9 @@ namespace InternetShopImplementations.Implementations
                 CountOfChoosedProducts = rec.CountOfChoosedProducts,
                 SumOfChoosedProducts = rec.SumOfChoosedProducts,
                 IsReserved = rec.IsReserved,
+                DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
+                SqlFunctions.DateName("mm", rec.DateCreate) + " " +
+                SqlFunctions.DateName("yyyy", rec.DateCreate),
                 ProductsBasket = context.ProductsBasket
                     .Where(recPC => recPC.BasketId == rec.Id)
                     .Select(recPC => new ProductBasketViewModel
@@ -49,6 +53,33 @@ namespace InternetShopImplementations.Implementations
             return result;
         }
 
+        public List<BasketViewModel> GetListBuy(int ClientId)
+        {
+            List<BasketViewModel> result = context.Baskets.
+                Where(rec => rec.ClientId == ClientId).
+                Select(rec => new BasketViewModel
+                {
+                    Id = rec.Id,
+                    ClientId = rec.ClientId,
+                    NameBuy = rec.NameBuy,
+                    SumOfChoosedProducts = rec.SumOfChoosedProducts,
+                    IsReserved = rec.IsReserved,
+                    DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
+                    SqlFunctions.DateName("mm", rec.DateCreate) + " " +
+                    SqlFunctions.DateName("yyyy", rec.DateCreate),
+                    ProductsBasket = context.ProductsBasket
+                    .Where(recPC => recPC.BasketId == rec.Id)
+                    .Select(recPC => new ProductBasketViewModel
+                    {
+                        Id = recPC.Id,
+                        ProductId = recPC.ProductId,
+                        BasketId = recPC.BasketId,
+                        ProductName = recPC.Product.ProductName,
+                        Count = recPC.Count,
+                    }).ToList()
+                }).ToList();
+            return result;
+        }
         public BasketViewModel GetElement(int id)
         {
             Basket element = context.Baskets.FirstOrDefault(rec => rec.Id == id);
@@ -78,7 +109,7 @@ namespace InternetShopImplementations.Implementations
             throw new Exception("Элемент не найден");
         }
 
-        public void AddElement(BasketBindingModel model)
+        public void AddBuy(BasketBindingModel model)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -94,9 +125,8 @@ namespace InternetShopImplementations.Implementations
                     {
                         ClientId = model.ClientId,
                         NameBuy = model.NameBuy,
-                        CountOfChoosedProducts = model.CountOfChoosedProducts,
                         SumOfChoosedProducts = model.SumOfChoosedProducts,
-                        IsReserved = model.IsReserved
+                        DateCreate = DateTime.Now
                     };
                     context.Baskets.Add(element);
                     context.SaveChanges();
@@ -108,14 +138,28 @@ namespace InternetShopImplementations.Implementations
                             ProductId = rec.Key,
                             Count = rec.Sum(r => r.Count)
                         });
-                    //// подумой!
+                    // запоминаем id и названия продуктов
+                    var productName = model.ProductsBasket.Select(rec => new
+                    {
+                        ProductId = rec.ProductId,
+                        ProductName = rec.ProductName
+                    });
                     // добавляем компоненты  
                     foreach (var groupProduct in groupProducts)
                     {
+                        string Name = null;
+                        foreach (var product in productName)
+                        {
+                            if (groupProduct.ProductId == product.ProductId)
+                            {
+                                Name = product.ProductName;
+                            }
+                        }
                         context.ProductsBasket.Add(new ProductBasket
                         {
                             BasketId = element.Id,
                             ProductId = groupProduct.ProductId,
+                            ProductName=Name,
                             Count = groupProduct.Count
                         });
                         context.SaveChanges();
@@ -131,7 +175,7 @@ namespace InternetShopImplementations.Implementations
             }
         }
 
-        public void UpdElement(BasketBindingModel model)
+        public void UpdBuy(BasketBindingModel model)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -201,7 +245,7 @@ namespace InternetShopImplementations.Implementations
                 }
             }
         }
-        public void DelElement(int id)
+        public void DelBuy(int id)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -229,34 +273,83 @@ namespace InternetShopImplementations.Implementations
             }
         }
 
-        public void MakeReservation(BasketBindingModel model)
+        public void MakeReservation(int id)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    Basket element = context.Baskets.FirstOrDefault(rec => rec.Id == model.Id);
+                    Basket element = context.Baskets.FirstOrDefault(rec => rec.Id == id);
                     if (element == null)
                     {
                         throw new Exception("Элемент не найден");
                     }
+                    if (element.IsReserved)
+                    {
+                        throw new Exception("Комплектующие по этой покупке уже зарезервированы");
+                    }
+                    else
+                    {
+                        element.IsReserved = true;
+                    }
+                    List<ComponentProductViewModel> componentproduct = new List<ComponentProductViewModel>();
+                    var productBaslet = context.ProductsBasket
+                        .Where(rec => rec.BasketId == element.Id)
+                        .Select(rec => new ProductBasketViewModel
+                        {
+                            ProductId = rec.ProductId,
+                            Count = rec.Count
+                        });
+                    foreach (var product in productBaslet)
+                    {
+                        var componentProduct = context.ComponentsProduct
+                            .Where(rec => rec.ProductId == product.ProductId)
+                            .Select(rec => new ComponentProductViewModel
+                            {
+                                ComponentId = rec.ComponentId,
+                                Count = rec.Count
+                            });
+                        foreach (var compon in componentProduct)
+                        {
+                            bool flag = false;
+                            for (int i = 0; i < componentproduct.Count(); i++)
+                            {
+                                if (componentproduct[i].ComponentId == compon.ComponentId)
+                                {
+                                    componentproduct[i].Count += compon.Count;
+                                    flag = true;
+                                }
+                            }
+                            if (!flag)
+                            {
+                                componentproduct.Add(compon);
+                                componentproduct.Last().Count = compon.Count * product.Count;
+                            }
+                        }
+                    }
+                    var Compoment = context.Components.Select(rec => new ComponentViewModel
+                    {
+                        Id = rec.Id,
+                        CountOfAvailable = rec.CountOfAvailable
+                    }).ToList();
 
-                    //var productsBasket = context.ProductsBasket.Include(rec => rec.Product).Where(rec => rec.BasketId == element.Id);
-                    //// списываем   
-                    //foreach (var setPart in setParts)
-                    //{
-                    //    int countOnStorages = setPart.Count * element.Count;
-                    //    var storageParts = context.StorageParts.Where(rec =>
-                    //    rec.PartId == setPart.PartId);
-
-                    //    if (countOnStorages > 0)
-                    //    {
-                    //        throw new Exception("Не достаточно компонента " +
-                    //            setPart.Part.PartName + " требуется " + setPart.Count + ", не хватает " + countOnStorages);
-                    //    }
-                    //}
-                    //element.DateImplement = DateTime.Now;
-                    //element.Status = ProcedureStatus.Выполняется;
+                    for (int i = 0; i < componentproduct.Count(); i++)
+                    {
+                        var index = componentproduct[i].ComponentId;
+                        var Com = context.Components.Where(rec => rec.Id == index);
+                        foreach (var com in Com)
+                        {
+                            if (componentproduct[i].Count <= com.CountOfAvailable)
+                            {
+                                com.CountOfAvailable -= componentproduct[i].Count;
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                throw new Exception("Не достаточно комплектующих,попробуйте позже");
+                            }
+                        }
+                    }
                     context.SaveChanges();
                     transaction.Commit();
                 }
@@ -265,6 +358,39 @@ namespace InternetShopImplementations.Implementations
                     transaction.Rollback();
                     throw;
                 }
+            }
+        }
+        public void SendEmail(string mailAddress, string subject, string text, string path)
+        {
+            MailMessage objMailMessage = new MailMessage();
+            SmtpClient objSmtpClient = null;
+            try
+            {
+                objMailMessage.From = new MailAddress("labwork15kafis@gmail.com");
+                objMailMessage.To.Add(new MailAddress(mailAddress));
+                objMailMessage.Subject = subject;
+                objMailMessage.Body = text;
+                objMailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
+                objMailMessage.BodyEncoding = System.Text.Encoding.UTF8;
+                objMailMessage.Attachments.Add(new Attachment(path));
+
+                objSmtpClient = new SmtpClient("smtp.gmail.com", 587);
+                objSmtpClient.UseDefaultCredentials = false;
+                objSmtpClient.EnableSsl = true;
+                objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                objSmtpClient.Credentials = new
+                NetworkCredential("labwork15kafis@gmail.com", "passlab15");
+
+                objSmtpClient.Send(objMailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                objMailMessage = null;
+                objSmtpClient = null;
             }
         }
     }

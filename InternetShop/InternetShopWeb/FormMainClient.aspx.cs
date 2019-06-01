@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
 using InternetShopImplementations.Implementations;
 using Unity;
 using InternetShopWeb.App_Start;
+using System.Drawing;
+using InternetShopServiceDAL.BindingModels;
 
 namespace InternetShopWeb
 {
     public partial class FormMainClient : System.Web.UI.Page
     {
         private readonly IMainClientServise service = UnityConfig.Container.Resolve<MainClientServiceDB>();
+
+        private readonly IReportService serviceR = UnityConfig.Container.Resolve<ReportServiceDB>();
 
         List<BasketViewModel> list;
 
@@ -28,7 +28,11 @@ namespace InternetShopWeb
         {
             try
             {
-                list = service.GetList();
+                list = service.GetListBuy(Convert.ToInt32(Session["ClientId"]));
+                dataGridView1.DataSource = list;
+                dataGridView1.DataBind();
+                dataGridView1.ShowHeaderWhenEmpty = true;
+                dataGridView1.SelectedRowStyle.BackColor = Color.Silver;
                 dataGridView1.Columns[0].Visible = false;
             }
             catch (Exception ex)
@@ -44,7 +48,7 @@ namespace InternetShopWeb
 
         protected void ButtonReport_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void ButtonCreateBuy_Click(object sender, EventArgs e)
@@ -54,29 +58,37 @@ namespace InternetShopWeb
 
         protected void ButtonUpdBuy_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedIndex >= 0)
+            try
             {
                 string index = list[dataGridView1.SelectedIndex].Id.ToString();
                 Session["id"] = index;
-                Server.Transfer("FormCreateBuy.aspx");
+                Server.Transfer("FormBuy.aspx");
+            }
+            catch (Exception ex)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
             }
         }
 
         protected void ButtonMakeReservation_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedIndex >= 0)
+            try
             {
-                try
+                service.MakeReservation(list[dataGridView1.SelectedIndex].Id);
+                string path = "C:\\Users\\Евгения\\Desktop\\PatientTreatment.xls";
+                serviceR.SaveClientBaskets(new ReportBindingModel
                 {
-                    int id = list[dataGridView1.SelectedIndex].Id;
-                    service.MakeReservation(new BasketBindingModel { Id = id });
-                    LoadData();
-                    Server.Transfer("FormMainClient.aspx");
-                }
-                catch (Exception ex)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
-                }
+                    FileName = path,
+                    DateFrom = DateTime.Now,
+                    DateTo = DateTime.Now
+                }, Convert.ToInt32(Session["ClientId"]));
+                service.SendEmail(Session["Email"].ToString(), "Оповещение по резервированию", "Резервирование выполнено", path);
+                LoadData();
+                Server.Transfer("FormMainClient.aspx");
+            }
+            catch (Exception ex)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
             }
         }
 

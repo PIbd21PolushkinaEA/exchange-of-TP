@@ -24,7 +24,8 @@ namespace InternetShopImplementations.Implementations
         }
         public List<ProductViewModel> GetList()
         {
-            List<ProductViewModel> result = context.Products.Select(rec => new ProductViewModel
+            List<ProductViewModel> result = context.Products.Select(rec =>
+            new ProductViewModel
             {
                 Id = rec.Id,
                 ProductName = rec.ProductName,
@@ -51,6 +52,57 @@ namespace InternetShopImplementations.Implementations
             }).ToList();
             return result;
         }
+
+        public List<ProductViewModel> GetAvailableList()
+        {
+            List<ProductViewModel> result = context.Products.Select(rec => new ProductViewModel
+            {
+                Id = rec.Id,
+                ProductName = rec.ProductName,
+                Price = rec.Price,
+                ComponentsProduct = context.ComponentsProduct
+                    .Where(recPM => recPM.ProductId == rec.Id)
+                    .Select(recPM => new ComponentProductViewModel
+                    {
+                        Id = recPM.Id,
+                        ComponentId = recPM.ComponentId,
+                        ProductId = recPM.ProductId,
+                        ComponentName = recPM.ComponentName,
+                        Count = recPM.Count
+                    }).ToList()
+            }).ToList();
+
+            List<ProductViewModel> neww = new List<ProductViewModel>();
+            foreach (var pr in result)
+            {
+                bool add = false;
+                foreach (var m in pr.ComponentsProduct)
+                {
+                    if (m.Count <= context.Components.FirstOrDefault(rec => rec.Id == m.ComponentId).CountOfAvailable)
+                    {
+                        add = true;
+                    }
+                }
+                if (add)
+                {
+                    neww.Add(pr);
+                }
+            }
+            return neww;
+        }
+
+
+        //public List<ProductViewModel> GetList(string brand)
+        //{
+        //    List<ComponentViewModel> result = context.Components
+        //        .Where(rec => rec.Brand == brand)
+        //        .Select(rec =>
+        //    new ComponentViewModel
+        //    {
+        //        Id=rec.Id
+        //    }).ToList();
+        //    return result;
+        //}
 
         public ProductViewModel GetElement(int id)
         {

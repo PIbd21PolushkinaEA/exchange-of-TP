@@ -18,10 +18,32 @@ namespace InternetShopWeb
     {
         private readonly IProductService service = UnityConfig.Container.Resolve<ProductServiceDB>();
 
+        private readonly IComponentService serviceC = UnityConfig.Container.Resolve<ComponentServiceDB>();
+
         List<ProductViewModel> list;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Page.IsPostBack)
+            {
+                try
+                {
+                    List<ComponentViewModel> list = serviceC.GetList();
+                    if (list != null)
+                    {
+                        DropDownListBrand.DataSource = list;
+                        DropDownListBrand.DataValueField = "Id";
+                        DropDownListBrand.DataTextField = "Brand";
+                        DropDownListBrand.SelectedIndex = -1;
+                        Page.DataBind();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+                }
+            }
             LoadData();
         }
         private void LoadData()
@@ -44,8 +66,13 @@ namespace InternetShopWeb
 
         protected void ButtonBack_Click(object sender, EventArgs e)
         {
-
             Server.Transfer("FormMainClient.aspx");
+        }
+
+        protected void Buttonfilter_Click(object sender, EventArgs e)
+        {
+            String brand = DropDownListBrand.SelectedValue;
+
         }
     }
 }

@@ -20,7 +20,7 @@ namespace InternetShopWeb
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            MailClient.Connect();
         }
 
         protected void RegistrationButton_Click(object sender, EventArgs e)
@@ -66,6 +66,7 @@ namespace InternetShopWeb
                     if (client.Email.Equals(email) && client.Password.Equals(password))
                     {
                         Session["ClientId"] = client.Id.ToString();
+                        Session["Email"] = client.Email;
                         Server.Transfer("FormMainClient.aspx");
                     }
                     else Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Нет такого пользователя');</script>");

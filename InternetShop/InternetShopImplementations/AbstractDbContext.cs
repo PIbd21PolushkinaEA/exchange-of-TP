@@ -9,7 +9,7 @@ namespace InternetShopImplementations
 {
     public class AbstractDbContext : DbContext
     {
-        public AbstractDbContext() : base("AbstractWebDbContext")
+        public AbstractDbContext() : base("AbstractDbContext")
         {
             //настройки конфигурации для entity            
             Configuration.ProxyCreationEnabled = false;

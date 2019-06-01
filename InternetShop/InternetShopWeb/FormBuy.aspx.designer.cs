@@ -10,7 +10,7 @@
 namespace InternetShopWeb {
     
     
-    public partial class FormProducts {
+    public partial class FormBuy {
         
         /// <summary>
         /// form1 элемент управления.
@@ -22,13 +22,22 @@ namespace InternetShopWeb {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ButtonUpd элемент управления.
+        /// textBoxName элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpd;
+        protected global::System.Web.UI.WebControls.TextBox textBoxName;
+        
+        /// <summary>
+        /// textBoxPrice элемент управления.
+        /// </summary>
+        /// <remarks>
+        /// Автоматически создаваемое поле.
+        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox textBoxPrice;
         
         /// <summary>
         /// dataGridView элемент управления.
@@ -40,39 +49,12 @@ namespace InternetShopWeb {
         protected global::System.Web.UI.WebControls.GridView dataGridView;
         
         /// <summary>
-        /// ButtonBack элемент управления.
+        /// ButtonCancel элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonBack;
-        
-        /// <summary>
-        /// ObjectDataSource1 элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSource1;
-        
-        /// <summary>
-        /// DropDownListBrand элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListBrand;
-        
-        /// <summary>
-        /// Buttonfilter элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Buttonfilter;
+        protected global::System.Web.UI.WebControls.Button ButtonCancel;
     }
 }

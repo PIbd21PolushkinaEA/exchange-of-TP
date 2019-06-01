@@ -13,15 +13,18 @@ namespace InternetShopServiceDAL.Interfaces
         //покупки
         List<BasketViewModel> GetList();
 
+        List<BasketViewModel> GetListBuy(int ClientId);
+
         BasketViewModel GetElement(int id);
 
-        void AddElement(BasketBindingModel model);
+        void AddBuy(BasketBindingModel model);
 
-        void UpdElement(BasketBindingModel model);
+        void UpdBuy(BasketBindingModel model);
 
-        void DelElement(int id);
+        void DelBuy(int id);
 
-        void MakeReservation(BasketBindingModel model);
+        void MakeReservation(int id);
 
+        void SendEmail(string mailAddress, string subject, string text, string path);
     }
 }

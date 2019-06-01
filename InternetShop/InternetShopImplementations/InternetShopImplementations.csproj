@@ -37,9 +37,21 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,11 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDbContext.cs" />
-    <Compile Include="Implementations\BasketServiceDB.cs" />
     <Compile Include="Implementations\ClientServiseDB.cs" />
     <Compile Include="Implementations\ComponentServiceDB.cs" />
     <Compile Include="Implementations\MainClientServiceDB.cs" />
     <Compile Include="Implementations\ProductServiceDB.cs" />
+    <Compile Include="Implementations\ReportServiceDB.cs" />
     <Compile Include="Implementations\RequestServiceDB.cs" />
     <Compile Include="Migrations\201905261430464_FirstMigration.cs" />
     <Compile Include="Migrations\201905261430464_FirstMigration.Designer.cs">
@@ -62,6 +74,10 @@
     <Compile Include="Migrations\201905301817338_Migration_2.cs" />
     <Compile Include="Migrations\201905301817338_Migration_2.Designer.cs">
       <DependentUpon>201905301817338_Migration_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905311426313_Migration_3.cs" />
+    <Compile Include="Migrations\201905311426313_Migration_3.Designer.cs">
+      <DependentUpon>201905311426313_Migration_3.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905301817338_Migration_2.resx">
       <DependentUpon>201905301817338_Migration_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905311426313_Migration_3.resx">
+      <DependentUpon>201905311426313_Migration_3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
