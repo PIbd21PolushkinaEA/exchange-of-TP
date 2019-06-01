@@ -24,10 +24,6 @@
             <asp:Button ID="ButtonBack" runat="server" Text="Вернуться" OnClick="ButtonBack_Click" />
             <br />
             <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="GetAvailableList" TypeName="InternetShopImplementations.Implementations.ProductServiceDB"></asp:ObjectDataSource>
-            <asp:DropDownList ID="DropDownListBrand" runat="server" Width="285px">
-        </asp:DropDownList>
-            <asp:Button ID="Buttonfilter" runat="server" Text="Применить" OnClick="Buttonfilter_Click" />
-            <br />
         </div>
     </form>
 </body>

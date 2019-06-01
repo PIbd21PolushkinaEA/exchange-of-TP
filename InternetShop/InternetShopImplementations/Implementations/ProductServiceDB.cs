@@ -91,19 +91,6 @@ namespace InternetShopImplementations.Implementations
             return neww;
         }
 
-
-        //public List<ProductViewModel> GetList(string brand)
-        //{
-        //    List<ComponentViewModel> result = context.Components
-        //        .Where(rec => rec.Brand == brand)
-        //        .Select(rec =>
-        //    new ComponentViewModel
-        //    {
-        //        Id=rec.Id
-        //    }).ToList();
-        //    return result;
-        //}
-
         public ProductViewModel GetElement(int id)
         {
             Product element = context.Products.FirstOrDefault(rec => rec.Id == id);

@@ -13,5 +13,7 @@ namespace InternetShopServiceDAL.Interfaces
         List<ClientBasketViewModel> GetClientBaskets(ReportBindingModel model, int ClientId);
 
         void SaveClientBaskets(ReportBindingModel model, int Clientd);
+
+        void SaveClientAllBaskets(ReportBindingModel model, int ClientId);
     }
 }

@@ -81,11 +81,11 @@
   <ItemGroup>
     <Content Include="FormBuy.aspx" />
     <Content Include="FormClient.aspx" />
+    <Content Include="FormClientBaskets.aspx" />
     <Content Include="FormCreateBuy.aspx" />
     <Content Include="FormMainClient.aspx" />
     <Content Include="FormProduct.aspx" />
     <Content Include="FormProducts.aspx" />
-    <Content Include="FormReport.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,13 @@
     </Compile>
     <Compile Include="FormClient.aspx.designer.cs">
       <DependentUpon>FormClient.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormClientBaskets.aspx.cs">
+      <DependentUpon>FormClientBaskets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormClientBaskets.aspx.designer.cs">
+      <DependentUpon>FormClientBaskets.aspx</DependentUpon>
     </Compile>
     <Compile Include="FormCreateBuy.aspx.cs">
       <DependentUpon>FormCreateBuy.aspx</DependentUpon>
@@ -131,13 +138,6 @@
     </Compile>
     <Compile Include="FormProducts.aspx.designer.cs">
       <DependentUpon>FormProducts.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="FormReport.aspx.cs">
-      <DependentUpon>FormReport.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="FormReport.aspx.designer.cs">
-      <DependentUpon>FormReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="MailClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

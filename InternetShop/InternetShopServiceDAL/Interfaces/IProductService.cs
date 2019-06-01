@@ -12,8 +12,6 @@ namespace InternetShopServiceDAL.Interfaces
     {
         List<ProductViewModel> GetList();
 
-        //List<ProductViewModel> GetList(string brand);
-
         List<ProductViewModel> GetAvailableList();
 
         ProductViewModel GetElement(int id);

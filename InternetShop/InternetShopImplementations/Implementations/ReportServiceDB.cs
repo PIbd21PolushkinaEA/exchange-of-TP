@@ -9,6 +9,8 @@ using System.Data.Entity;
 using System.IO;
 using InternetShopServiceDAL.BindingModels;
 using Microsoft.Office.Interop.Excel;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace InternetShopImplementations.Implementations
 {
@@ -45,11 +47,7 @@ namespace InternetShopImplementations.Implementations
                                 }).ToList()
                             }).ToList();
         }
-
-
-
-
-        public void SaveClientBaskets(ReportBindingModel model, int PatientId)
+        public void SaveClientBaskets(ReportBindingModel model, int ClientId)
         {
             var excel = new Microsoft.Office.Interop.Excel.Application();
             try
@@ -108,7 +106,7 @@ namespace InternetShopImplementations.Implementations
                 excelcells.Value2 = "Количество";
                 excelcells = excelcells.get_Offset(0, -1);
 
-                var dict = GetClientBaskets(model, PatientId);
+                var dict = GetClientBaskets(model, ClientId);
                 int i = 0;
                 if (dict != null)
                 {
@@ -159,7 +157,99 @@ namespace InternetShopImplementations.Implementations
             finally
             {
                 excel.Quit();
+                Thread.Sleep(5);
             }
+        }
+        public void SaveClientAllBaskets(ReportBindingModel model, int ClientId)
+        {
+            //открываем файл для работы
+            FileStream fs = new FileStream(model.FileName, FileMode.OpenOrCreate, FileAccess.Write);
+            //создаем документ, задаем границы, связываем документ и поток
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
+            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+
+            doc.Open();
+            BaseFont baseFont = BaseFont.CreateFont("TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            //вставляем заголовок
+            var phraseTitle = new Phrase("Покупки клиента",
+            new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
+            iTextSharp.text.Paragraph paragraph = new
+            iTextSharp.text.Paragraph(phraseTitle)
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingAfter = 12
+            };
+            doc.Add(paragraph);
+
+            var phrasePeriod = new Phrase("c " + model.DateFrom.Value.ToShortDateString()
+                + " по " + model.DateTo.Value.ToShortDateString(), new iTextSharp.text.Font(baseFont, 14,
+                iTextSharp.text.Font.BOLD));
+            paragraph = new iTextSharp.text.Paragraph(phrasePeriod)
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingAfter = 12
+            };
+            doc.Add(paragraph);
+
+            //вставляем таблицу, задаем количество столбцов, и ширину колонок
+            PdfPTable table = new PdfPTable(3)
+            {
+                TotalWidth = 800F
+            };
+            table.SetTotalWidth(new float[] { 160, 140, 160 });
+
+            //вставляем шапку
+            PdfPCell cell = new PdfPCell();
+            var fontForCellBold = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.BOLD);
+            table.AddCell(new PdfPCell(new Phrase("Клиент", fontForCellBold))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER
+            });
+            table.AddCell(new PdfPCell(new Phrase("Компонент", fontForCellBold))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER
+            });
+            table.AddCell(new PdfPCell(new Phrase("Количество", fontForCellBold))
+            {
+                HorizontalAlignment = Element.ALIGN_CENTER
+            });
+
+            //заполняем таблицу
+            var list = GetClientBaskets(model, ClientId);
+            var fontForCells = new iTextSharp.text.Font(baseFont, 10);
+            foreach (var pt in list)
+            {
+                cell = new PdfPCell(new Phrase(pt.Name, fontForCells));
+                table.AddCell(cell);
+                int i = 0;
+                foreach (var pr in pt.productList)
+                {
+                    foreach (var pm in pr.ComponentsProduct)
+                    {
+                        cell = new PdfPCell(new Phrase(pm.ComponentName, fontForCells));
+                        table.AddCell(cell);
+                        cell = new PdfPCell(new Phrase(pm.Count.ToString(), fontForCells));
+                        table.AddCell(cell);
+                    }
+                    i++;
+                    if ((pt.productList.Count() > 1) && (i != pt.productList.Count()))
+                    {
+                        cell = new PdfPCell(new Phrase(" ", fontForCells));
+                        table.AddCell(cell);
+                    }
+
+                }
+                cell = new PdfPCell(new Phrase("--", fontForCells));
+                table.AddCell(cell);
+                cell = new PdfPCell(new Phrase("--", fontForCells));
+                table.AddCell(cell);
+                cell = new PdfPCell(new Phrase("--", fontForCells));
+                table.AddCell(cell);
+            }
+            doc.Add(table);
+            doc.Close();
         }
     }
 }

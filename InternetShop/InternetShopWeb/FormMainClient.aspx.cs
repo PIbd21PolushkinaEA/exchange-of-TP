@@ -48,7 +48,7 @@ namespace InternetShopWeb
 
         protected void ButtonReport_Click(object sender, EventArgs e)
         {
-            
+            Server.Transfer("FormClientBaskets.aspx");
         }
 
         protected void ButtonCreateBuy_Click(object sender, EventArgs e)
@@ -75,7 +75,7 @@ namespace InternetShopWeb
             try
             {
                 service.MakeReservation(list[dataGridView1.SelectedIndex].Id);
-                string path = "C:\\Users\\Евгения\\Desktop\\PatientTreatment.xls";
+                string path = "C:\\Users\\Евгения\\Desktop\\ClientBasket.xls";
                 serviceR.SaveClientBaskets(new ReportBindingModel
                 {
                     FileName = path,

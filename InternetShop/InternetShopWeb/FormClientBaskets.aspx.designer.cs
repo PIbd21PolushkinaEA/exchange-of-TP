@@ -10,7 +10,7 @@
 namespace InternetShopWeb {
     
     
-    public partial class FormProducts {
+    public partial class FormClientBaskets {
         
         /// <summary>
         /// form1 элемент управления.
@@ -22,39 +22,39 @@ namespace InternetShopWeb {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ButtonUpd элемент управления.
+        /// Calendar1 элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpd;
+        protected global::System.Web.UI.WebControls.Calendar Calendar1;
         
         /// <summary>
-        /// dataGridView элемент управления.
+        /// Calendar2 элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dataGridView;
+        protected global::System.Web.UI.WebControls.Calendar Calendar2;
         
         /// <summary>
-        /// ButtonBack элемент управления.
+        /// ButtonMake элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonBack;
+        protected global::System.Web.UI.WebControls.Button ButtonMake;
         
         /// <summary>
-        /// ObjectDataSource1 элемент управления.
+        /// ButtonCancel элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource ObjectDataSource1;
+        protected global::System.Web.UI.WebControls.Button ButtonCancel;
     }
 }
