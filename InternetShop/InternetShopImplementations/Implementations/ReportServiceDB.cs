@@ -226,12 +226,19 @@ namespace InternetShopImplementations.Implementations
                 int i = 0;
                 foreach (var pr in pt.productList)
                 {
+                    int y = 0;
                     foreach (var pm in pr.ComponentsProduct)
                     {
                         cell = new PdfPCell(new Phrase(pm.ComponentName, fontForCells));
                         table.AddCell(cell);
                         cell = new PdfPCell(new Phrase(pm.Count.ToString(), fontForCells));
                         table.AddCell(cell);
+                        y++;
+                        if ((pr.ComponentsProduct.Count() > 1) && (y != pr.ComponentsProduct.Count()))
+                        {
+                            cell = new PdfPCell(new Phrase(" ", fontForCells));
+                            table.AddCell(cell);
+                        }
                     }
                     i++;
                     if ((pt.productList.Count() > 1) && (i != pt.productList.Count()))

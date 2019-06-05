@@ -25,8 +25,6 @@ namespace InternetShopWeb
 
         private ProductBasketViewModel model;
 
-        private int price;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Int32.TryParse((string)Session["id"], out id))
