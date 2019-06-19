@@ -34,28 +34,21 @@ namespace InternetShopView {
             try {
                 if ( id.HasValue ) {
                     ComponentViewModel view = service.GetElement(id.Value);
+                    List<ComponentViewModel> list = service.GetList();
                     if ( view != null ) {
+                        initComboBox(list);
                         comboBoxManuf.Enabled = true;
                         comboBoxBrand.Enabled = true;
-                        comboBoxDetail.SelectedItem = view.Name;
-                        comboBoxManuf.SelectedItem = view.Manufacturer;
-                        comboBoxBrand.SelectedItem = view.Brand;
-                        textBoxCount.Text = view.CountOfAvailable.ToString();
+                        comboBoxDetail.SelectedValue = view.Id;
+                        comboBoxManuf.SelectedValue = view.Id;
+                        comboBoxBrand.SelectedValue = view.Id;
+                        textBoxCount.Text = "0";
                     }
                 }
                 else {
                     List<ComponentViewModel> list = service.GetList();
 
-                    comboBoxDetail.DisplayMember = "Name";
-                    comboBoxDetail.ValueMember = "Id";
-                    comboBoxDetail.DataSource = list;
-                    comboBoxDetail.SelectedItem = null;
-                    comboBoxManuf.DisplayMember = "Manufacturer";
-                    comboBoxManuf.ValueMember = "Id";
-                    comboBoxManuf.Enabled = false;
-                    comboBoxBrand.DisplayMember = "Brand";
-                    comboBoxBrand.ValueMember = "Id";
-                    comboBoxBrand.Enabled = false;
+                    initComboBox(list);
                 }
             }
             catch ( Exception ex ) {
@@ -64,7 +57,6 @@ namespace InternetShopView {
             }
 
             if ( model != null ) {
-                comboBoxDetail.Enabled = false;
                 comboBoxDetail.SelectedValue = model.ComponentId;
                 textBoxCount.Text = model.Count.ToString();
             }
@@ -82,16 +74,23 @@ namespace InternetShopView {
                 MessageBoxIcon.Error);
                 return;
             }
-
+            ComponentViewModel element = service.GetElement(Convert.ToInt32(comboBoxBrand.SelectedValue));
             try {
                 if ( model == null ) {
                     model = new ComponentProductViewModel {
-                        ComponentId = Convert.ToInt32(comboBoxDetail.SelectedValue),
-                        ComponentName = comboBoxDetail.Text,
+                        ComponentId = element.Id,
+                        ComponentName = element.Name,
+                        Manuf = element.Manufacturer,
+                        Brand = element.Brand,
+                        ComponentRating = element.Rating,
                         Count = Convert.ToInt32(textBoxCount.Text)
                     };
                 }
                 else {
+                    model.ComponentName = comboBoxDetail.Text;
+                    model.Manuf = comboBoxManuf.Text;
+                    model.Brand = comboBoxBrand.Text;
+                    model.ComponentRating = element.Rating;
                     model.Count = Convert.ToInt32(textBoxCount.Text);
                 }
 
@@ -106,25 +105,17 @@ namespace InternetShopView {
             }
         }
 
+        private void initComboBox(List<ComponentViewModel> list)
+        {
+            comboBoxDetail.DisplayMember = "Name";
+            comboBoxDetail.ValueMember = "Id";
+            comboBoxDetail.DataSource = list;
+            comboBoxDetail.SelectedItem = null;
+        }
+
         private void cancel_Button_Click(object sender, EventArgs e) {
             DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private void comboBoxDetail_SelectedIndexChanged(object sender, EventArgs e) {
-            comboBoxManuf.Enabled = true;
-            comboBoxManuf.SelectedItem = null;
-            List<ComponentViewModel> listBrand = service.GetList()
-                .Where(viewModel => viewModel.Name.Equals(comboBoxDetail.Text)).ToList();
-            comboBoxManuf.DataSource = listBrand;
-        }
-
-        private void comboBoxManuf_SelectedIndexChanged_1(object sender, EventArgs e) {
-            comboBoxBrand.Enabled = true;
-            comboBoxBrand.SelectedItem = null;
-            List<ComponentViewModel> listManuf = service.GetList()
-                .Where(viewModel => viewModel.Manufacturer.Equals(comboBoxManuf.Text)).ToList();
-            comboBoxBrand.DataSource = listManuf;
         }
     }
 }

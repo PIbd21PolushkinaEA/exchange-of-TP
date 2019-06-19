@@ -42,8 +42,11 @@ namespace InternetShopView {
         private void ButtonRef_Click(object sender, EventArgs e) {
             if ( dataGridViewProducts.SelectedRows.Count == 1 ) {
                 var form = Container.Resolve<FormComponentProduct>();
-                form.Id = Convert.ToInt32(dataGridViewProducts.SelectedRows[0].Cells[0].Value);
+                form.Model =
+               _componentsProduct[dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex];
                 if ( form.ShowDialog() == DialogResult.OK ) {
+                    _componentsProduct[dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex] =
+                   form.Model;
                     LoadData();
                 }
             }
@@ -100,8 +103,10 @@ namespace InternetShopView {
                     dataGridViewProducts.Columns[0].Visible = false;
                     dataGridViewProducts.Columns[1].Visible = false;
                     dataGridViewProducts.Columns[2].Visible = false;
-                    dataGridViewProducts.Columns[3].AutoSizeMode =
-                        DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewProducts.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewProducts.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewProducts.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewProducts.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
             catch ( Exception ex ) {
@@ -134,6 +139,10 @@ namespace InternetShopView {
                         Id = _componentsProduct[i].Id,
                         ProductId = _componentsProduct[i].ProductId,
                         ComponentId = _componentsProduct[i].ComponentId,
+                        ComponentName = _componentsProduct[i].ComponentName,
+                        Manuf = _componentsProduct[i].Manuf,
+                        Brand = _componentsProduct[i].Brand,
+                        ComponentRating = _componentsProduct[i].ComponentRating,
                         Count = _componentsProduct[i].Count
                     });
                 }

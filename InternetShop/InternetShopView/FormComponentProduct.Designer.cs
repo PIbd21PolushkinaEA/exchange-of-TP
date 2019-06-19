@@ -74,8 +74,6 @@ namespace InternetShopView {
             this.comboBoxDetail.Name = "comboBoxDetail";
             this.comboBoxDetail.Size = new System.Drawing.Size(334, 23);
             this.comboBoxDetail.TabIndex = 3;
-            this.comboBoxDetail.SelectedIndexChanged +=
-                new System.EventHandler(this.comboBoxDetail_SelectedIndexChanged);
             // 
             // cancel_Button
             // 
@@ -128,8 +126,6 @@ namespace InternetShopView {
             this.comboBoxManuf.Name = "comboBoxManuf";
             this.comboBoxManuf.Size = new System.Drawing.Size(334, 23);
             this.comboBoxManuf.TabIndex = 9;
-            this.comboBoxManuf.SelectedIndexChanged +=
-                new System.EventHandler(this.comboBoxManuf_SelectedIndexChanged_1);
             // 
             // label4
             // 

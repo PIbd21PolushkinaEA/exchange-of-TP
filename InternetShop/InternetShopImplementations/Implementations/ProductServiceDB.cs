@@ -47,6 +47,10 @@ namespace InternetShopImplementations.Implementations
                     Id = recPC.Id,
                     ProductId = recPC.ProductId,
                     ComponentId = recPC.ComponentId,
+                    ComponentName = recPC.ComponentName,
+                    Manuf = recPC.Manuf,
+                    Brand = recPC.Brand,
+                    ComponentRating = recPC.ComponentRating,
                     Count = recPC.Count
                 }).ToList()
             }).ToList();
@@ -68,6 +72,9 @@ namespace InternetShopImplementations.Implementations
                         ComponentId = recPM.ComponentId,
                         ProductId = recPM.ProductId,
                         ComponentName = recPM.ComponentName,
+                        Manuf = recPM.Manuf,
+                        Brand = recPM.Brand,
+                        ComponentRating = recPM.ComponentRating,
                         Count = recPM.Count
                     }).ToList()
             }).ToList();
@@ -118,6 +125,10 @@ namespace InternetShopImplementations.Implementations
                     Id = recPC.Id,
                     ProductId = recPC.ProductId,
                     ComponentId = recPC.ComponentId,
+                    ComponentName = recPC.ComponentName,
+                    Manuf = recPC.Manuf,
+                    Brand = recPC.Brand,
+                    ComponentRating = recPC.ComponentRating,
                     Count = recPC.Count
                 }).ToList()
                 };
@@ -139,11 +150,27 @@ namespace InternetShopImplementations.Implementations
                     element = new Product
                     {
                         ProductName = model.ProductName,
-                        Price = model.Price
+                        Price = model.Price,
                     };
                     context.Products.Add(element);
                     context.SaveChanges();
                     // убираем дубли по компонентам    
+                    List<ComponentProduct> componentProducts = new List<ComponentProduct>();
+                    for (int i = 0; i < model.ComponentsProduct.Count; i++)
+                    {
+                        ComponentProductBindingModel componentProduct = model.ComponentsProduct[i];
+                        componentProducts.Add(new ComponentProduct
+                        {
+                            Id = componentProduct.Id,
+                            ProductId = element.Id,
+                            ComponentId = componentProduct.ComponentId,
+                            ComponentName = componentProduct.ComponentName,
+                            Manuf = componentProduct.Manuf,
+                            Brand = componentProduct.Brand,
+                            ComponentRating = componentProduct.ComponentRating,
+                            Count = componentProduct.Count
+                        });
+                    }
                     var groupComponents = model.ComponentsProduct
                         .GroupBy(rec => rec.ComponentId)
                         .Select(rec => new
