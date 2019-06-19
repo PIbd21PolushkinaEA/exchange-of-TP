@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InternetShopServiceDAL.ViewModel
-{
-    public class ClientViewModel
-    {
+﻿namespace InternetShopServiceDAL.ViewModel {
+    public class ClientViewModel {
         public int Id { get; set; }
 
         public string Name { get; set; }

@@ -6,26 +6,24 @@ using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
 
-namespace InternetShopImplementations.Implementations
-{
-    public class ComponentServiceDB : IComponentService
-    {
+namespace InternetShopImplementations.Implementations {
+    public class ComponentServiceDB : IComponentService {
         private AbstractWebDbContext context;
 
-        public ComponentServiceDB(AbstractWebDbContext context)
-        {
+        public ComponentServiceDB(AbstractWebDbContext context) {
             this.context = context;
         }
-        public void AddElement(ComponentBindingModel model)
-        {
+
+        public void AddElement(ComponentBindingModel model) {
             Component element = context.Components.FirstOrDefault(rec => rec.Name ==
-           model.Name);
-            if (element != null)
-            {
-                throw new Exception("Уже есть клиент с таким ФИО");
+                                                                         model.Name &&
+                                                                         rec.Manufacturer == model.Manufacturer &&
+                                                                         rec.Brand == model.Brand);
+            if ( element != null ) {
+                throw new Exception("РЈР¶Рµ РµСЃС‚СЊ С‚Р°РєРѕРµ РєРѕРјРїР»РµРєС‚СѓСЋС‰РµРµ");
             }
-            context.Components.Add(new Component
-            {
+
+            context.Components.Add(new Component {
                 Name = model.Name,
                 Brand = model.Brand,
                 Manufacturer = model.Manufacturer,
@@ -35,27 +33,21 @@ namespace InternetShopImplementations.Implementations
             context.SaveChanges();
         }
 
-        public void DelElement(int id)
-        {
+        public void DelElement(int id) {
             Component element = context.Components.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
-            {
+            if ( element != null ) {
                 context.Components.Remove(element);
                 context.SaveChanges();
             }
-            else
-            {
-                throw new Exception("Элемент не найден");
+            else {
+                throw new Exception("Р­Р»РµРјРµРЅС‚ РЅРµ РЅР°Р№РґРµРЅ");
             }
         }
 
-        public ComponentViewModel GetElement(int id)
-        {
+        public ComponentViewModel GetElement(int id) {
             Component element = context.Components.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
-            {
-                return new ComponentViewModel
-                {
+            if ( element != null ) {
+                return new ComponentViewModel {
                     Id = element.Id,
                     Name = element.Name,
                     Brand = element.Brand,
@@ -64,38 +56,36 @@ namespace InternetShopImplementations.Implementations
                     Price = element.Price
                 };
             }
-            throw new Exception("Элемент не найден");
+
+            throw new Exception("Р­Р»РµРјРµРЅС‚ РЅРµ РЅР°Р№РґРµРЅ");
         }
 
-        public List<ComponentViewModel> GetList()
-        {
+        public List<ComponentViewModel> GetList() {
             List<ComponentViewModel> result = context.Components.Select(rec => new
-           ComponentViewModel
-            {
-                Id = rec.Id,
-                Name = rec.Name,
-                Brand = rec.Brand,
-                Manufacturer = rec.Manufacturer,
-                Rating = rec.Rating,
-                Price = rec.Price
-            })
-            .ToList();
+                    ComponentViewModel {
+                        Id = rec.Id,
+                        Name = rec.Name,
+                        Brand = rec.Brand,
+                        Manufacturer = rec.Manufacturer,
+                        Rating = rec.Rating,
+                        Price = rec.Price
+                    })
+                .ToList();
             return result;
         }
 
-        public void UpdElement(ComponentBindingModel model)
-        {
+        public void UpdElement(ComponentBindingModel model) {
             Component element = context.Components.FirstOrDefault(rec => rec.Name ==
-           model.Name && rec.Id != model.Id);
-            if (element != null)
-            {
-                throw new Exception("Уже есть клиент с таким ФИО");
+                                                                         model.Name && rec.Id != model.Id);
+            if ( element != null ) {
+                throw new Exception("РЈР¶Рµ РµСЃС‚СЊ С‚Р°РєРѕРµ РєРѕРјРїР»РµРєС‚СѓСЋС‰РµРµ");
             }
+
             element = context.Components.FirstOrDefault(rec => rec.Id == model.Id);
-            if (element == null)
-            {
-                throw new Exception("Элемент не найден");
+            if ( element == null ) {
+                throw new Exception("Р­Р»РµРјРµРЅС‚ РЅРµ РЅР°Р№РґРµРЅ");
             }
+
             element.Name = model.Name;
             element.Brand = model.Brand;
             element.Manufacturer = model.Manufacturer;

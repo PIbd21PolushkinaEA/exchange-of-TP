@@ -1,34 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Unity;
-using InternetShopServiceDAL.Interfaces;
+using System.Data.Entity;
 using InternetShopImplementations;
 using InternetShopImplementations.Implementations;
-using System.Data.Entity;
+using InternetShopServiceDAL.Interfaces;
+using Unity;
 using Unity.Lifetime;
 
-namespace InternetShopWeb.App_Start
-{
+namespace InternetShopWeb.App_Start {
     /// <summary>
     /// Specifies the Unity configuration for the main container.
     /// </summary>
-    public static class UnityConfig
-    {
+    public static class UnityConfig {
         #region Unity Container
+
         private static Lazy<IUnityContainer> container =
-          new Lazy<IUnityContainer>(() =>
-          {
-              var container = new UnityContainer();
-              RegisterTypes(container);
-              return container;
-          });
+            new Lazy<IUnityContainer>(() => {
+                var container = new UnityContainer();
+                RegisterTypes(container);
+                return container;
+            });
 
         /// <summary>
         /// Configured Unity Container.
         /// </summary>
         public static IUnityContainer Container => container.Value;
+
         #endregion
 
         /// <summary>
@@ -41,8 +37,7 @@ namespace InternetShopWeb.App_Start
         /// allows resolving a concrete type even if it was not previously
         /// registered.
         /// </remarks>
-        public static void RegisterTypes(IUnityContainer container)
-        {
+        public static void RegisterTypes(IUnityContainer container) {
             // NOTE: To load from web.config uncomment the line below.
             // Make sure to add a Unity.Configuration to the using statements.
             // container.LoadConfiguration();

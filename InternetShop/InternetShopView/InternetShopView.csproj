@@ -39,12 +39,35 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,17 +91,47 @@
     <Compile Include="FormAdminMain.Designer.cs">
       <DependentUpon>FormAdminMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAuth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAuth.Designer.cs">
+      <DependentUpon>FormAuth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormClientOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormClientOrders.Designer.cs">
+      <DependentUpon>FormClientOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormComponent.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormComponent.Designer.cs">
       <DependentUpon>FormComponent.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormComponentProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormComponentProduct.Designer.cs">
+      <DependentUpon>FormComponentProduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormComponents.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormComponents.Designer.cs">
       <DependentUpon>FormComponents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProduct.Designer.cs">
+      <DependentUpon>FormProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProducts.Designer.cs">
+      <DependentUpon>FormProducts.cs</DependentUpon>
     </Compile>
     <Compile Include="FormRequest.cs">
       <SubType>Form</SubType>
@@ -88,14 +141,30 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <EmbeddedResource Include="FormAdminMain.resx">
       <DependentUpon>FormAdminMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAuth.resx">
+      <DependentUpon>FormAuth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormClientOrders.resx">
+      <DependentUpon>FormClientOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormComponent.resx">
       <DependentUpon>FormComponent.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormComponentProduct.resx">
+      <DependentUpon>FormComponentProduct.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormComponents.resx">
       <DependentUpon>FormComponents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormProduct.resx">
+      <DependentUpon>FormProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormProducts.resx">
+      <DependentUpon>FormProducts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRequest.resx">
       <DependentUpon>FormRequest.cs</DependentUpon>
@@ -109,7 +178,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Report1.rdlc" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\InternetShopServiceDAL.ViewModel.ClientOrdersModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -139,6 +210,21 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

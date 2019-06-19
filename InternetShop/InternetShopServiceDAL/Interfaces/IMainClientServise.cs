@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.ViewModel;
 
-namespace InternetShopServiceDAL.Interfaces
-{
-    public interface IMainClientServise
-    {
+namespace InternetShopServiceDAL.Interfaces {
+    public interface IMainClientServise {
         //покупки
         List<BasketViewModel> GetList();
 
@@ -22,6 +16,5 @@ namespace InternetShopServiceDAL.Interfaces
         void DelElement(int id);
 
         void MakeReservation(ProductBasketBindingModel model);
-
     }
 }

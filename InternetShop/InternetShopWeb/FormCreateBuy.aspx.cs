@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using InternetShopImplementations.Implementations;
 using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
-using InternetShopImplementations.Implementations;
-using Unity;
 using InternetShopWeb.App_Start;
-using InternetShopServiceDAL;
-using System.Drawing;
+using Unity;
 
-namespace InternetShopWeb
-{
-    public partial class FormCreateBuy : System.Web.UI.Page
-    {
+namespace InternetShopWeb {
+    public partial class FormCreateBuy : Page {
         private readonly IMainClientServise service = UnityConfig.Container.Resolve<MainClientServiceDB>();
 
         private int id;
@@ -25,60 +21,52 @@ namespace InternetShopWeb
 
         private ProductBasketViewModel model;
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (Int32.TryParse((string)Session["id"], out id))
-            {
-                try
-                {
+        protected void Page_Load(object sender, EventArgs e) {
+            if ( Int32.TryParse((string) Session["id"], out id) ) {
+                try {
                     BasketViewModel view = service.GetElement(id);
-                    if (view != null)
-                    {
-                        if (!Page.IsPostBack)
-                        {
+                    if ( view != null ) {
+                        if ( !Page.IsPostBack ) {
                             textBoxName.Text = view.NameBuy;
                             textBoxPrice.Text = view.SumOfChoosedProducts.ToString();
                         }
+
                         this.ProductsBasket = view.ProductsBasket;
                         LoadData();
                     }
                 }
-                catch (Exception ex)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+                catch ( Exception ex ) {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                    "<script>alert('" + ex.Message + "');</script>");
                 }
             }
-            else
-            {
+            else {
                 this.ProductsBasket = new List<ProductBasketViewModel>();
             }
-            if (Session["SEId"] != null)
-            {
-                if ((Session["SEIs"] != null) && (Session["Change"].ToString() != "0"))
-                {
-                    model = new ProductBasketViewModel
-                    {
-                        Id = (int)Session["SEId"],
-                        BasketId = (int)Session["SEBasketId"],
-                        ProductId = (int)Session["SEProductId"],
-                        ProductName = (string)Session["SEProductName"],
-                        Count = (int)Session["SECount"]
+
+            if ( Session["SEId"] != null ) {
+                if ( (Session["SEIs"] != null) && (Session["Change"].ToString() != "0") ) {
+                    model = new ProductBasketViewModel {
+                        Id = (int) Session["SEId"],
+                        BasketId = (int) Session["SEBasketId"],
+                        ProductId = (int) Session["SEProductId"],
+                        ProductName = (string) Session["SEProductName"],
+                        Count = (int) Session["SECount"]
                     };
 
-                    this.ProductsBasket[(int)Session["SEIs"]] = model;
+                    this.ProductsBasket[(int) Session["SEIs"]] = model;
                     Session["Change"] = "0";
                 }
-                else
-                {
-                    model = new ProductBasketViewModel
-                    {
-                        BasketId = (int)Session["SEBasketId"],
-                        ProductId = (int)Session["SEProductId"],
+                else {
+                    model = new ProductBasketViewModel {
+                        BasketId = (int) Session["SEBasketId"],
+                        ProductId = (int) Session["SEProductId"],
                         ProductName = Session["SEProductName"].ToString(),
-                        Count = (int)Session["SECount"]
+                        Count = (int) Session["SECount"]
                     };
                     this.ProductsBasket.Add(model);
                 }
+
                 Session["SEId"] = null;
                 Session["SEBasketId"] = null;
                 Session["SEProductId"] = null;
@@ -86,11 +74,10 @@ namespace InternetShopWeb
                 Session["SECount"] = null;
                 Session["SEIs"] = null;
             }
+
             List<ProductBasketBindingModel> setPartBM = new List<ProductBasketBindingModel>();
-            for (int i = 0; i < this.ProductsBasket.Count; ++i)
-            {
-                setPartBM.Add(new ProductBasketBindingModel
-                {
+            for ( int i = 0; i < this.ProductsBasket.Count; ++i ) {
+                setPartBM.Add(new ProductBasketBindingModel {
                     Id = this.ProductsBasket[i].Id,
                     BasketId = this.ProductsBasket[i].BasketId,
                     ProductId = this.ProductsBasket[i].ProductId,
@@ -98,22 +85,18 @@ namespace InternetShopWeb
                     Count = this.ProductsBasket[i].Count
                 });
             }
-            if (setPartBM.Count != 0)
-            {
-                if (Int32.TryParse((string)Session["id"], out id))
-                {
-                    service.UpdElement(new BasketBindingModel
-                    {
+
+            if ( setPartBM.Count != 0 ) {
+                if ( Int32.TryParse((string) Session["id"], out id) ) {
+                    service.UpdElement(new BasketBindingModel {
                         Id = id,
                         NameBuy = "Введите название",
                         SumOfChoosedProducts = 0,
                         ProductsBasket = setPartBM
                     });
                 }
-                else
-                {
-                    service.AddElement(new BasketBindingModel
-                    {
+                else {
+                    service.AddElement(new BasketBindingModel {
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = "Введите название",
                         SumOfChoosedProducts = 0,
@@ -123,14 +106,13 @@ namespace InternetShopWeb
                     Session["Change"] = "0";
                 }
             }
+
             LoadData();
         }
-        private void LoadData()
-        {
-            try
-            {
-                if (ProductsBasket != null)
-                {
+
+        private void LoadData() {
+            try {
+                if ( ProductsBasket != null ) {
                     dataGridView.DataBind();
                     dataGridView.DataSource = ProductsBasket;
                     dataGridView.DataBind();
@@ -141,21 +123,18 @@ namespace InternetShopWeb
                     dataGridView.Columns[3].Visible = false;
                 }
             }
-            catch (Exception ex)
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+            catch ( Exception ex ) {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('" + ex.Message + "');</script>");
             }
         }
 
-        protected void ButtonAdd_Click(object sender, EventArgs e)
-        {
+        protected void ButtonAdd_Click(object sender, EventArgs e) {
             Server.Transfer("FormProduct.aspx");
         }
 
-        protected void ButtonChange_Click(object sender, EventArgs e)
-        {
-            if (dataGridView.SelectedIndex >= 0)
-            {
+        protected void ButtonChange_Click(object sender, EventArgs e) {
+            if ( dataGridView.SelectedIndex >= 0 ) {
                 model = service.GetElement(id).ProductsBasket[dataGridView.SelectedIndex];
                 Session["SEId"] = model.Id;
                 Session["SEBasketId"] = model.BasketId;
@@ -168,61 +147,56 @@ namespace InternetShopWeb
             }
         }
 
-        protected void ButtonDelete_Click(object sender, EventArgs e)
-        {
-            if (dataGridView.SelectedIndex >= 0)
-            {
-                try
-                {
+        protected void ButtonDelete_Click(object sender, EventArgs e) {
+            if ( dataGridView.SelectedIndex >= 0 ) {
+                try {
                     ProductsBasket.RemoveAt(dataGridView.SelectedIndex);
                 }
-                catch (Exception ex)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+                catch ( Exception ex ) {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                    "<script>alert('" + ex.Message + "');</script>");
                 }
+
                 LoadData();
             }
         }
 
-        protected void ButtonUpd_Click(object sender, EventArgs e)
-        {
+        protected void ButtonUpd_Click(object sender, EventArgs e) {
             LoadData();
         }
 
-        protected void ButtonSave_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(textBoxName.Text))
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Заполните название');</script>");
+        protected void ButtonSave_Click(object sender, EventArgs e) {
+            if ( string.IsNullOrEmpty(textBoxName.Text) ) {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('Заполните название');</script>");
                 return;
             }
-            if (string.IsNullOrEmpty(textBoxPrice.Text))
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Заполните цену');</script>");
+
+            if ( string.IsNullOrEmpty(textBoxPrice.Text) ) {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('Заполните цену');</script>");
                 return;
             }
-            if (ProductsBasket == null || ProductsBasket.Count == 0)
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Заполните товары');</script>");
+
+            if ( ProductsBasket == null || ProductsBasket.Count == 0 ) {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('Заполните товары');</script>");
                 return;
             }
-            try
-            {
+
+            try {
                 List<ProductBasketBindingModel> productBasketBM = new List<ProductBasketBindingModel>();
-                for (int i = 0; i < ProductsBasket.Count; ++i)
-                {
-                    productBasketBM.Add(new ProductBasketBindingModel
-                    {
+                for ( int i = 0; i < ProductsBasket.Count; ++i ) {
+                    productBasketBM.Add(new ProductBasketBindingModel {
                         Id = ProductsBasket[i].Id,
                         ProductId = ProductsBasket[i].ProductId,
                         BasketId = ProductsBasket[i].BasketId,
                         Count = ProductsBasket[i].Count
                     });
                 }
-                if (Int32.TryParse((string)Session["id"], out id))
-                {
-                    service.UpdElement(new BasketBindingModel
-                    {
+
+                if ( Int32.TryParse((string) Session["id"], out id) ) {
+                    service.UpdElement(new BasketBindingModel {
                         Id = id,
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = textBoxName.Text,
@@ -230,71 +204,65 @@ namespace InternetShopWeb
                         ProductsBasket = productBasketBM
                     });
                 }
-                else
-                {
-                    service.AddElement(new BasketBindingModel
-                    {
+                else {
+                    service.AddElement(new BasketBindingModel {
                         ClientId = Int32.Parse(Session["ClientId"].ToString()),
                         NameBuy = textBoxName.Text,
                         SumOfChoosedProducts = Convert.ToInt32(textBoxPrice.Text),
                         ProductsBasket = productBasketBM
                     });
                 }
+
                 Session["id"] = null;
                 Session["Change"] = null;
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('Сохранение прошло успешно');</script>");
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('Сохранение прошло успешно');</script>");
                 Server.Transfer("FormMainClient.aspx");
             }
-            catch (Exception ex)
-            {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+            catch ( Exception ex ) {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                "<script>alert('" + ex.Message + "');</script>");
             }
         }
 
-        protected void ButtonCancel_Click(object sender, EventArgs e)
-        {
-            if (service.GetList().Count != 0 && service.GetList().Last().NameBuy == null)
-            {
+        protected void ButtonCancel_Click(object sender, EventArgs e) {
+            if ( service.GetList().Count != 0 && service.GetList().Last().NameBuy == null ) {
                 service.DelElement(service.GetList().Last().Id);
             }
-            if (!String.Equals(Session["Change"], null))
-            {
+
+            if ( !Equals(Session["Change"], null) ) {
                 service.DelElement(id);
             }
+
             Session["id"] = null;
             Session["Change"] = null;
             Server.Transfer("FormMainClient.aspx");
         }
-        protected void dataGridView_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
+
+        protected void dataGridView_RowDataBound(object sender, GridViewRowEventArgs e) {
             e.Row.Cells[1].Visible = false;
             e.Row.Cells[2].Visible = false;
             e.Row.Cells[3].Visible = false;
         }
 
-        protected void textBoxName_TextChanged(object sender, EventArgs e)
-        {
+        protected void textBoxName_TextChanged(object sender, EventArgs e) {
             CalcSum();
         }
 
-        private void CalcSum()
-        {
-            if (!string.IsNullOrEmpty(textBoxName.Text))
-            {
-                try
-                {
+        private void CalcSum() {
+            if ( !string.IsNullOrEmpty(textBoxName.Text) ) {
+                try {
                     //model = service.GetElement(id).ProductsBasket[dataGridView.SelectedIndex];
                     //int id = Convert.ToInt32(dataGridView[0, 0].Value);
                     //ProductViewModel product = serviceS.GetElement(id);
                     //int count = Convert.ToInt32(TextBoxCount.Text);
                     //TextBoxSum.Text = (count * product.Price).ToString();
                 }
-                catch (Exception ex)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts", "<script>alert('" + ex.Message + "');</script>");
+                catch ( Exception ex ) {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "Scripts",
+                    "<script>alert('" + ex.Message + "');</script>");
                 }
             }
         }
-
     }
 }

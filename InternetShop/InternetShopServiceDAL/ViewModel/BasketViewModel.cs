@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace InternetShopServiceDAL.ViewModel
-{
-    public class BasketViewModel
-    {
+namespace InternetShopServiceDAL.ViewModel {
+    public class BasketViewModel {
         public int Id { get; set; }
 
         public int ClientId { get; set; }
