@@ -11,6 +11,7 @@ using Unity;
 using InternetShopWeb.App_Start;
 using System.Drawing;
 using InternetShopServiceDAL.BindingModels;
+using Microsoft.Reporting.WebForms;
 
 namespace InternetShopWeb
 {
@@ -34,15 +35,29 @@ namespace InternetShopWeb
             }
             try
             {
-                string path = "C:\\Users\\Евгения\\Desktop\\ClientAllBasket.pdf";
-                serviceR.SaveClientAllBaskets(new ReportBindingModel
+                ReportParameter parameter = new ReportParameter("ReportParameterPeriod",
+                                               "c " + Calendar1.SelectedDate.ToShortDateString() +
+                                               " по " + Calendar2.SelectedDate.ToShortDateString());
+                ReportViewer.LocalReport.SetParameters(parameter);
+
+                var dataSource = serviceR.GetBaskets(new ReportBindingModel
+                {
+                    DateFrom = Calendar1.SelectedDate,
+                    DateTo = Calendar2.SelectedDate
+                }, Convert.ToInt32(Session["ClientId"]));
+
+                ReportDataSource source = new ReportDataSource("DataSet", dataSource);
+                ReportViewer.LocalReport.DataSources.Add(source);
+                ReportViewer.DataBind();
+
+                string path = "C:\\Users\\Евгения\\Desktop\\Baskets.pdf";
+                serviceR.SaveBaskets(new ReportBindingModel
                 {
                     FileName = path,
                     DateFrom = Calendar1.SelectedDate,
                     DateTo = Calendar2.SelectedDate
                 }, Convert.ToInt32(Session["ClientId"]));
-                service.SendEmail(Session["Email"].ToString(), "Покупки клиента", "", path);
-                Server.Transfer("FormMainClient.aspx");
+                //service.SendEmail(Session["Email"].ToString(), "Покупка клиента", "", path);
             }
             catch (Exception ex)
             {

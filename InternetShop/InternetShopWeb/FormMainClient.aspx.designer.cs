@@ -40,6 +40,24 @@ namespace InternetShopWeb {
         protected global::System.Web.UI.WebControls.Button ButtonReport;
         
         /// <summary>
+        /// ButtonBackUpXML элемент управления.
+        /// </summary>
+        /// <remarks>
+        /// Автоматически создаваемое поле.
+        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonBackUpXML;
+        
+        /// <summary>
+        /// ButtonBackUpJSON элемент управления.
+        /// </summary>
+        /// <remarks>
+        /// Автоматически создаваемое поле.
+        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonBackUpJSON;
+        
+        /// <summary>
         /// ButtonCreateBuy элемент управления.
         /// </summary>
         /// <remarks>

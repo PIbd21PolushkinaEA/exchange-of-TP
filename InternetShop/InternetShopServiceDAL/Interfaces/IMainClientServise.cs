@@ -23,7 +23,7 @@ namespace InternetShopServiceDAL.Interfaces
 
         void DelBuy(int id);
 
-        void MakeReservation(int id);
+        DateTime MakeReservation(int id);
 
         void SendEmail(string mailAddress, string subject, string text, string path);
     }

@@ -33,7 +33,6 @@ namespace InternetShopImplementations.Implementations
                 Id = rec.Id,
                 ClientId = rec.ClientId,
                 NameBuy = rec.NameBuy,
-                CountOfChoosedProducts = rec.CountOfChoosedProducts,
                 SumOfChoosedProducts = rec.SumOfChoosedProducts,
                 IsReserved = rec.IsReserved,
                 DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
@@ -90,7 +89,6 @@ namespace InternetShopImplementations.Implementations
                     Id = element.Id,
                     ClientId = element.ClientId,
                     NameBuy = element.NameBuy,
-                    CountOfChoosedProducts = element.CountOfChoosedProducts,
                     SumOfChoosedProducts = element.SumOfChoosedProducts,
                     IsReserved = element.IsReserved,
                     ProductsBasket = context.ProductsBasket
@@ -273,7 +271,7 @@ namespace InternetShopImplementations.Implementations
             }
         }
 
-        public void MakeReservation(int id)
+        public DateTime MakeReservation(int id)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -352,6 +350,8 @@ namespace InternetShopImplementations.Implementations
                     }
                     context.SaveChanges();
                     transaction.Commit();
+
+                    return element.DateCreate;
                 }
                 catch (Exception)
                 {

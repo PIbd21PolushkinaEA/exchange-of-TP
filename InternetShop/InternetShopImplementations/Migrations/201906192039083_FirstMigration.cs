@@ -14,8 +14,9 @@ namespace InternetShopImplementations.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ClientId = c.Int(nullable: false),
                         NameBuy = c.String(nullable: false),
-                        CountOfChoosedProducts = c.Int(nullable: false),
                         SumOfChoosedProducts = c.Int(nullable: false),
+                        IsReserved = c.Boolean(nullable: false),
+                        DateCreate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Clients", t => t.ClientId, cascadeDelete: true)
@@ -41,7 +42,6 @@ namespace InternetShopImplementations.Migrations
                         BasketId = c.Int(nullable: false),
                         ProductName = c.String(),
                         Count = c.Int(nullable: false),
-                        IsReserved = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Baskets", t => t.BasketId, cascadeDelete: true)
@@ -96,6 +96,7 @@ namespace InternetShopImplementations.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ComponentId = c.Int(nullable: false),
                         RequestId = c.Int(nullable: false),
+                        ComponentName = c.String(),
                         CountComponents = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
@@ -110,6 +111,7 @@ namespace InternetShopImplementations.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Date = c.DateTime(nullable: false),
+                        RequestName = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             

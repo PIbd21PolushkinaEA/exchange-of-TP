@@ -1,10 +1,12 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FormClientBaskets.aspx.cs" Inherits="InternetShopWeb.FormClientBaskets" %>
 
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
 </head>
 <body>
@@ -30,10 +32,19 @@
                 <TodayDayStyle BackColor="#CCCCCC" ForeColor="Black" />
                 <WeekendDayStyle BackColor="#FFFFCC" />
             </asp:Calendar>
+            <asp:Button ID="ButtonMake" runat="server" OnClick="ButtonMake_Click" Text="Составить отчет" Width="196px" />
+            <asp:Button ID="ButtonCancel" runat="server" OnClick="ButtonCancel_Click" Text="Вернуться" Width="196px" />
+            <asp:ScriptManager ID="ScriptManager1" runat="server">
+            </asp:ScriptManager>
+            <rsweb:ReportViewer ID="ReportViewer" runat="server" Font-Names="Verdana" Font-Size="8pt" Width="930px">
+                <LocalReport ReportPath="Report.rdlc">
+                    <DataSources>
+                        <rsweb:ReportDataSource Name="DataSet" />
+                    </DataSources>
+                </LocalReport>
+            </rsweb:ReportViewer>
             <br />
         </div>
-        <asp:Button ID="ButtonMake" runat="server" OnClick="ButtonMake_Click" Text="Отправить отчет" Width="196px" />
-        <asp:Button ID="ButtonCancel" runat="server" OnClick="ButtonCancel_Click" Text="Вернуться" Width="196px" />
     </form>
 </body>
 </html>

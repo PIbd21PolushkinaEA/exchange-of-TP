@@ -7,13 +7,13 @@ namespace InternetShopImplementations.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Migration_2 : IMigrationMetadata
+    public sealed partial class FirstMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Migration_2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FirstMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201905301817338_Migration_2"; }
+            get { return "201906192039083_FirstMigration"; }
         }
         
         string IMigrationMetadata.Source

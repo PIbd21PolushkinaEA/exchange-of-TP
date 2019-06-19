@@ -10,10 +10,14 @@ namespace InternetShopServiceDAL.Interfaces
 {
     public interface IReportService
     {
-        List<ClientBasketViewModel> GetClientBaskets(ReportBindingModel model, int ClientId);
+        //List<ClientBasketViewModel> GetClientBaskets(ReportBindingModel model, int ClientId);
 
-        void SaveClientBaskets(ReportBindingModel model, int Clientd);
+        List<ReportViewModel> GetBaskets(ReportBindingModel model, int PatientId);
 
-        void SaveClientAllBaskets(ReportBindingModel model, int ClientId);
+        List<ReportViewModel> GetRequests(ReportBindingModel model);
+
+        void SaveLoad(ReportBindingModel model, int Clientd);
+
+        void SaveBaskets(ReportBindingModel model, int ClientId);
     }
 }

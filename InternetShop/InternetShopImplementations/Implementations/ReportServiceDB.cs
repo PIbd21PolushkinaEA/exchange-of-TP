@@ -1,16 +1,18 @@
 ﻿using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
+using InternetShopServiceDAL.BindingModels;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Data.Entity;
-using System.IO;
-using InternetShopServiceDAL.BindingModels;
-using Microsoft.Office.Interop.Excel;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
+
 
 namespace InternetShopImplementations.Implementations
 {
@@ -28,26 +30,213 @@ namespace InternetShopImplementations.Implementations
             this.context = new AbstractDbContext();
         }
 
-        public List<ClientBasketViewModel> GetClientBaskets(ReportBindingModel model, int ClientId)
+        public List<ReportViewModel> GetRequests(ReportBindingModel model)
         {
-            return context.Baskets
-                            .Include(rec => rec.Client)
-                            .Where(rec => rec.Client.Id == ClientId)
-                            .Select(rec => new ClientBasketViewModel
-                            {
-                                Name = rec.Client.Name,
-                                isReserved = rec.IsReserved,
-                                productList = rec.ProductsBasket.Select(recp => new ProductViewModel
-                                {
-                                    ComponentsProduct = recp.Product.ComponentsProduct.Select(recm => new ComponentProductViewModel
-                                    {
-                                        ComponentName = recm.Component.Name,
-                                        Count = recm.Count * recp.Count
-                                    }).ToList()
-                                }).ToList()
-                            }).ToList();
+            return context.RequestComponents
+                .Include(rec => rec.Request)
+                .Include(rec => rec.Component)
+                .Where(rec => rec.Request.Date >= model.DateFrom && rec.Request.Date <= model.DateTo)
+                .Select(rec => new ReportViewModel
+                {
+                    NameBuy = rec.Request.RequestName,
+                    Date = SqlFunctions.DateName("dd", rec.Request.Date) + " " +
+                           SqlFunctions.DateName("mm", rec.Request.Date) + " " +
+                           SqlFunctions.DateName("yyyy", rec.Request.Date),
+                    Name = "Admin",
+                    ComponentName = rec.ComponentName,
+                    ComponentCount = rec.CountComponents
+                })
+                .ToList();
         }
-        public void SaveClientBaskets(ReportBindingModel model, int ClientId)
+        public List<ReportViewModel> GetBaskets(ReportBindingModel model, int ClientId)
+        {
+            //return context.TreatmentPrescriptions
+            //    .Include(rec => rec.Treatment)
+            //    .Include(rec => rec.Treatment.Patient)
+            //    .Include(rec => rec.Prescription)
+            //    .Include(rec => rec.Prescription.PrescriptionMedications)
+            //    .Where(rec => rec.Treatment.Date >= model.DateFrom && rec.Treatment.Date <= model.DateTo)
+            //    .Select(rec => new ReportViewModel
+            //    {
+            //        Title = rec.Treatment.Title,
+            //        Date = SqlFunctions.DateName("dd", rec.Treatment.Date) + " " +
+            //               SqlFunctions.DateName("mm", rec.Treatment.Date) + " " +
+            //               SqlFunctions.DateName("yyyy", rec.Treatment.Date),
+            //        FIO = rec.Treatment.Patient.FIO,
+            //        MedicationName = rec.Prescription.PrescriptionMedications.FirstOrDefault(recP => recP.PrescriptionId == rec.Prescription.Id).MedicationName,
+            //        MedicationCount = rec.Count * rec.Prescription.PrescriptionMedications.FirstOrDefault(recP => recP.PrescriptionId == rec.Prescription.Id).CountMedications
+            //    })
+            //    .ToList();
+
+            List<ReportViewModel> list = new List<ReportViewModel>();
+
+            if (ClientId != -1)
+            {
+                foreach (var o in context.Baskets.Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo && rec.ClientId == ClientId))
+                {
+                    foreach (var p in context.ProductsBasket.Where(rec => rec.BasketId == o.Id))
+                    {
+                        int i = 0;
+                        foreach (var med in context.ComponentsProduct.Where(rec => rec.ProductId == p.ProductId))
+                        {
+                            ReportViewModel rep = new ReportViewModel();
+                            if (i < 1)
+                            {
+                                rep.Name = context.Clients.FirstOrDefault(rec => rec.Id == o.ClientId).Name;
+                                rep.NameBuy = o.NameBuy;
+                                rep.Date = o.DateCreate.ToShortDateString();
+                            }
+                            else
+                            {
+                                rep.Name = " ";
+                                rep.NameBuy = " ";
+                                rep.Date = " ";
+                            }
+                            rep.ComponentName = med.ComponentName;
+                            rep.ComponentCount = med.Count * p.Count;
+                            list.Add(rep);
+                            i++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var o in context.Baskets.Where(rec => rec.DateCreate >= model.DateFrom && rec.DateCreate <= model.DateTo))
+                {
+                    foreach (var p in context.ProductsBasket.Where(rec => rec.BasketId == o.Id))
+                    {
+                        int i = 0;
+                        foreach (var med in context.ComponentsProduct.Where(rec => rec.ProductId == p.ProductId))
+                        {
+                            ReportViewModel rep = new ReportViewModel();
+                            if (i < 1)
+                            {
+                                rep.Name = context.Clients.FirstOrDefault(rec => rec.Id == o.ClientId).Name;
+                                rep.NameBuy = o.NameBuy;
+                                rep.Date = o.DateCreate.ToShortDateString();
+                            }
+                            else
+                            {
+                                rep.Name = " ";
+                                rep.NameBuy = " ";
+                                rep.Date = " ";
+                            }
+                            rep.ComponentName = med.ComponentName;
+                            rep.ComponentCount = med.Count * p.Count;
+                            list.Add(rep);
+                            i++;
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public void SaveBaskets(ReportBindingModel model, int ClientId)
+        {
+            FileStream fs = new FileStream(model.FileName, FileMode.OpenOrCreate, FileAccess.Write);
+
+            //создаем документ, задаем границы, связываем документ и поток
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+
+            try
+            {
+                //открываем файл для работы                
+                doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
+                PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+
+                doc.Open();
+                BaseFont baseFont = BaseFont.CreateFont("C:\\Users\\Евгения\\Desktop\\TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+                //вставляем заголовок
+                var phraseTitle = new Phrase("Отчет",
+                new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
+                iTextSharp.text.Paragraph paragraph = new iTextSharp.text.Paragraph(phraseTitle)
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingAfter = 12
+                };
+                doc.Add(paragraph);
+
+                var phrasePeriod = new Phrase("c " + model.DateFrom.Value.ToShortDateString() +
+                                              " по " + model.DateTo.Value.ToShortDateString(),
+                                              new iTextSharp.text.Font(baseFont, 14, iTextSharp.text.Font.BOLD));
+
+                paragraph = new iTextSharp.text.Paragraph(phrasePeriod)
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingAfter = 12
+                };
+                doc.Add(paragraph);
+
+                //вставляем таблицу, задаем количество столбцов, и ширину колонок
+                PdfPTable table = new PdfPTable(5)
+                {
+                    TotalWidth = 800F
+                };
+                table.SetTotalWidth(new float[] { 160, 100, 120, 180, 120 });
+
+                //вставляем шапку
+                PdfPCell cell = new PdfPCell();
+                var fontForCellBold = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.BOLD);
+                table.AddCell(new PdfPCell(new Phrase("Название", fontForCellBold))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+                table.AddCell(new PdfPCell(new Phrase("Дата", fontForCellBold))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+                table.AddCell(new PdfPCell(new Phrase("Имя", fontForCellBold))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+                table.AddCell(new PdfPCell(new Phrase("Компонент", fontForCellBold))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+                table.AddCell(new PdfPCell(new Phrase("Количество", fontForCellBold))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER
+                });
+
+                //заполняем таблицу
+                var list = GetBaskets(model, ClientId);
+                var fontForCells = new iTextSharp.text.Font(baseFont, 10);
+
+                foreach (var el in list)
+                {
+                    cell = new PdfPCell(new Phrase(el.NameBuy, fontForCells));
+                    table.AddCell(cell);
+
+                    cell = new PdfPCell(new Phrase(el.Date, fontForCells));
+                    table.AddCell(cell);
+
+                    cell = new PdfPCell(new Phrase(el.Name, fontForCells));
+                    table.AddCell(cell);
+
+                    cell = new PdfPCell(new Phrase(el.ComponentName, fontForCells));
+                    table.AddCell(cell);
+
+                    cell = new PdfPCell(new Phrase(el.ComponentCount.ToString(), fontForCells));
+                    table.AddCell(cell);
+                }
+
+                doc.Add(table);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            finally
+            {
+                doc.Close();
+                Thread.Sleep(5);
+            }
+        }
+        public void SaveLoad(ReportBindingModel model, int ClientId)
         {
             var excel = new Microsoft.Office.Interop.Excel.Application();
             try
@@ -92,60 +281,63 @@ namespace InternetShopImplementations.Implementations
                 excelcells.Font.Name = "Times New Roman";
                 excelcells.Font.Size = 12;
 
-                excelcells = excelcells.get_Offset(1, 1);
+                excelcells = excelworksheet.get_Range("A3", "A3");
                 excelcells.Interior.Color = Color.Yellow;
                 excelcells.Font.Bold = true;
-                excelcells.Value2 = "Клиент";
+                excelcells.ColumnWidth = 15;
+                excelcells.Value2 = "Название";
                 excelcells = excelcells.get_Offset(0, 1);
                 excelcells.Interior.Color = Color.Yellow;
                 excelcells.Font.Bold = true;
-                excelcells.Value2 = "Компнент";
+                excelcells.ColumnWidth = 15;
+                excelcells.Value2 = "Дата";
                 excelcells = excelcells.get_Offset(0, 1);
                 excelcells.Interior.Color = Color.Yellow;
                 excelcells.Font.Bold = true;
+                excelcells.ColumnWidth = 15;
+                excelcells.Value2 = "Имя";
+                excelcells = excelcells.get_Offset(0, 1);
+                excelcells.Interior.Color = Color.Yellow;
+                excelcells.Font.Bold = true;
+                excelcells.ColumnWidth = 15;
+                excelcells.Value2 = "Компонент";
+                excelcells = excelcells.get_Offset(0, 1);
+                excelcells.Interior.Color = Color.Yellow;
+                excelcells.Font.Bold = true;
+                excelcells.ColumnWidth = 15;
                 excelcells.Value2 = "Количество";
-                excelcells = excelcells.get_Offset(0, -1);
+                excelcells = excelworksheet.get_Range("A4", "A4");
 
-                var dict = GetClientBaskets(model, ClientId);
-                int i = 0;
-                if (dict != null)
+                List<ReportViewModel> list = new List<ReportViewModel>();
+
+                if (model.FileName.Contains("Client"))
                 {
-                    foreach (var pt in dict)
-                    {
-                        if (i == dict.Count - 1)
-                        {
-                            excelcells = excelcells.get_Offset(2, 0);
-                            excelcells.Value2 = pt.Name;
-                            excelcells = excelcells.get_Offset(0, 1);
-                            if (pt.productList.Count() > 0)
-                            {
-                                foreach (var pr in pt.productList)
-                                {
-                                    var excelBorder =
-                                    excelworksheet.get_Range(excelcells,
-                                                excelcells.get_Offset(pr.ComponentsProduct.Count() - 1, 1));
-                                    excelBorder.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                                    excelBorder.Borders.Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;
-                                    excelBorder.HorizontalAlignment = Constants.xlCenter;
-                                    excelBorder.VerticalAlignment = Constants.xlCenter;
-                                    excelBorder.BorderAround(Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous,
-                                                            Microsoft.Office.Interop.Excel.XlBorderWeight.xlMedium,
-                                                            Microsoft.Office.Interop.Excel.XlColorIndex.xlColorIndexAutomatic,
-                                                            1);
-                                    foreach (var pm in pr.ComponentsProduct)
-                                    {
-                                        excelcells.Value2 = pm.ComponentName;
-                                        excelcells = excelcells.get_Offset(0, 1);
-                                        excelcells.Value2 = pm.Count;
-                                        excelcells = excelcells.get_Offset(1, -1);
-                                    }
-                                }
-                            }
-                            excelcells = excelcells.get_Offset(0, -1);
-                        }
-                        i++;
-                    }
+                    list = GetBaskets(model, ClientId);
+                }
+                else
+                {
+                    list = GetRequests(model);
+                }
 
+                if (list != null)
+                {
+                    foreach (var el in list)
+                    {
+                        excelcells.Value2 = el.NameBuy;
+                        excelcells = excelcells.get_Offset(0, 1);
+
+                        excelcells.Value2 = el.Date;
+                        excelcells = excelcells.get_Offset(0, 1);
+
+                        excelcells.Value2 = el.Name;
+                        excelcells = excelcells.get_Offset(0, 1);
+
+                        excelcells.Value2 = el.ComponentName;
+                        excelcells = excelcells.get_Offset(0, 1);
+
+                        excelcells.Value2 = el.ComponentCount;
+                        excelcells = excelcells.get_Offset(1, -4);
+                    }
                 }
                 excel.Workbooks[1].Save();
             }
@@ -159,104 +351,7 @@ namespace InternetShopImplementations.Implementations
                 excel.Quit();
                 Thread.Sleep(5);
             }
-        }
-        public void SaveClientAllBaskets(ReportBindingModel model, int ClientId)
-        {
-            //открываем файл для работы
-            FileStream fs = new FileStream(model.FileName, FileMode.OpenOrCreate, FileAccess.Write);
-            //создаем документ, задаем границы, связываем документ и поток
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            doc.SetMargins(0.5f, 0.5f, 0.5f, 0.5f);
-            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
 
-            doc.Open();
-            BaseFont baseFont = BaseFont.CreateFont("TIMCYR.TTF", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-
-            //вставляем заголовок
-            var phraseTitle = new Phrase("Покупки клиента",
-            new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
-            iTextSharp.text.Paragraph paragraph = new
-            iTextSharp.text.Paragraph(phraseTitle)
-            {
-                Alignment = Element.ALIGN_CENTER,
-                SpacingAfter = 12
-            };
-            doc.Add(paragraph);
-
-            var phrasePeriod = new Phrase("c " + model.DateFrom.Value.ToShortDateString()
-                + " по " + model.DateTo.Value.ToShortDateString(), new iTextSharp.text.Font(baseFont, 14,
-                iTextSharp.text.Font.BOLD));
-            paragraph = new iTextSharp.text.Paragraph(phrasePeriod)
-            {
-                Alignment = Element.ALIGN_CENTER,
-                SpacingAfter = 12
-            };
-            doc.Add(paragraph);
-
-            //вставляем таблицу, задаем количество столбцов, и ширину колонок
-            PdfPTable table = new PdfPTable(3)
-            {
-                TotalWidth = 800F
-            };
-            table.SetTotalWidth(new float[] { 160, 140, 160 });
-
-            //вставляем шапку
-            PdfPCell cell = new PdfPCell();
-            var fontForCellBold = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.BOLD);
-            table.AddCell(new PdfPCell(new Phrase("Клиент", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
-            table.AddCell(new PdfPCell(new Phrase("Компонент", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
-            table.AddCell(new PdfPCell(new Phrase("Количество", fontForCellBold))
-            {
-                HorizontalAlignment = Element.ALIGN_CENTER
-            });
-
-            //заполняем таблицу
-            var list = GetClientBaskets(model, ClientId);
-            var fontForCells = new iTextSharp.text.Font(baseFont, 10);
-            foreach (var pt in list)
-            {
-                cell = new PdfPCell(new Phrase(pt.Name, fontForCells));
-                table.AddCell(cell);
-                int i = 0;
-                foreach (var pr in pt.productList)
-                {
-                    int y = 0;
-                    foreach (var pm in pr.ComponentsProduct)
-                    {
-                        cell = new PdfPCell(new Phrase(pm.ComponentName, fontForCells));
-                        table.AddCell(cell);
-                        cell = new PdfPCell(new Phrase(pm.Count.ToString(), fontForCells));
-                        table.AddCell(cell);
-                        y++;
-                        if ((pr.ComponentsProduct.Count() > 1) && (y != pr.ComponentsProduct.Count()))
-                        {
-                            cell = new PdfPCell(new Phrase(" ", fontForCells));
-                            table.AddCell(cell);
-                        }
-                    }
-                    i++;
-                    if ((pt.productList.Count() > 1) && (i != pt.productList.Count()))
-                    {
-                        cell = new PdfPCell(new Phrase(" ", fontForCells));
-                        table.AddCell(cell);
-                    }
-
-                }
-                cell = new PdfPCell(new Phrase("--", fontForCells));
-                table.AddCell(cell);
-                cell = new PdfPCell(new Phrase("--", fontForCells));
-                table.AddCell(cell);
-                cell = new PdfPCell(new Phrase("--", fontForCells));
-                table.AddCell(cell);
-            }
-            doc.Add(table);
-            doc.Close();
         }
     }
 }

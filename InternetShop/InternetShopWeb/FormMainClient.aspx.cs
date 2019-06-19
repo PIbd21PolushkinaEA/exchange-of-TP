@@ -17,6 +17,8 @@ namespace InternetShopWeb
 
         private readonly IReportService serviceR = UnityConfig.Container.Resolve<ReportServiceDB>();
 
+        private readonly IBackUpService serviceB = UnityConfig.Container.Resolve<BackUpServiceDB>();
+
         List<BasketViewModel> list;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -74,15 +76,15 @@ namespace InternetShopWeb
         {
             try
             {
-                service.MakeReservation(list[dataGridView1.SelectedIndex].Id);
+                DateTime date = service.MakeReservation(list[dataGridView1.SelectedIndex].Id);
                 string path = "C:\\Users\\Евгения\\Desktop\\ClientBasket.xls";
-                serviceR.SaveClientBaskets(new ReportBindingModel
+                serviceR.SaveLoad(new ReportBindingModel
                 {
                     FileName = path,
-                    DateFrom = DateTime.Now,
+                    DateFrom = date,
                     DateTo = DateTime.Now
                 }, Convert.ToInt32(Session["ClientId"]));
-                service.SendEmail(Session["Email"].ToString(), "Оповещение по резервированию", "Резервирование выполнено", path);
+                //service.SendEmail(Session["Email"].ToString(), "Оповещение по резервированию", "Резервирование выполнено", path);
                 LoadData();
                 Server.Transfer("FormMainClient.aspx");
             }
@@ -96,6 +98,16 @@ namespace InternetShopWeb
         {
             LoadData();
             Server.Transfer("FormMainClient.aspx");
+        }
+
+        protected void ButtonBackUpXML_Click(object sender, EventArgs e)
+        {
+            serviceB.ClientBackUpXML(Convert.ToInt32(Session["ClientId"]));
+        }
+
+        protected void ButtonBackUpJSON_Click(object sender, EventArgs e)
+        {
+            serviceB.ClientBackUpJSON(Convert.ToInt32(Session["ClientId"]));
         }
     }
 }

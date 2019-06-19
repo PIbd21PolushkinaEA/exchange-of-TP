@@ -56,6 +56,7 @@ namespace InternetShopWeb.App_Start
             container.RegisterType<IMainClientServise, MainClientServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IRequestService, RequestServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IReportService, ReportServiceDB>(new HierarchicalLifetimeManager());
+            container.RegisterType<IBackUpService, BackUpServiceDB>(new HierarchicalLifetimeManager());
         }
     }
 }
