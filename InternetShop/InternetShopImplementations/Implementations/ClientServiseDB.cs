@@ -13,9 +13,9 @@ namespace InternetShopImplementations.Implementations
 {
     public class ClientServiceDB : IClientService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public ClientServiceDB(AbstractDbContext context)
+        public ClientServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }

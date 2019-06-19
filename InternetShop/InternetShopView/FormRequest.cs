@@ -19,7 +19,7 @@ namespace InternetShopView {
 
         private int? id;
 
-        private List<RequestComponentViewModel> _componentsProduct;
+        private List<RequestViewModel> _componentsProduct;
 
         public FormRequest(IRequestService service)
         {

@@ -60,7 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractDbContext.cs" />
+    <Compile Include="AbstractWebDbContext.cs" />
     <Compile Include="Implementations\ClientServiseDB.cs" />
     <Compile Include="Implementations\ComponentServiceDB.cs" />
     <Compile Include="Implementations\MainClientServiceDB.cs" />
@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201905311426313_Migration_3.cs" />
     <Compile Include="Migrations\201905311426313_Migration_3.Designer.cs">
       <DependentUpon>201905311426313_Migration_3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906191304515_some.cs" />
+    <Compile Include="Migrations\201906191304515_some.Designer.cs">
+      <DependentUpon>201906191304515_some.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905311426313_Migration_3.resx">
       <DependentUpon>201905311426313_Migration_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906191304515_some.resx">
+      <DependentUpon>201906191304515_some.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

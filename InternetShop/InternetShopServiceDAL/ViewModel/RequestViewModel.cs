@@ -6,6 +6,6 @@ namespace InternetShopServiceDAL.ViewModel {
         public int Id { get; set; }
         public string RequestName { get; set; }
         public DateTime Date { get; set; }
-        public List<RequestComponentViewModel> RequestComponents { get; set; }
+        public List<RequestViewModel> RequestComponents { get; set; }
     }
 }

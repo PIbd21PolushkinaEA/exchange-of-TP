@@ -22,7 +22,8 @@ namespace InternetShopView {
         {
             InitializeComponent();
             this.service = service;
-        }
+        }
+
 
         private void FormClientOrders_Load(object sender, EventArgs e)
         {
@@ -46,11 +47,11 @@ namespace InternetShopView {
                 " по " +
                dateTimePickerTo.Value.ToShortDateString());
                 reportViewer1.LocalReport.SetParameters(parameter);
-                var dataSource = service.GetClientOrders(new ReportBindingModel
+                var dataSource = service.GetClientBaskets(new ReportBindingModel
                 {
                     DateFrom = dateTimePickerFrom.Value,
                     DateTo = dateTimePickerTo.Value
-                });
+                }, 0);
                 ReportDataSource source = new ReportDataSource("DataSetOrders",
                dataSource);
                 reportViewer1.LocalReport.DataSources.Add(source);
@@ -79,12 +80,12 @@ namespace InternetShopView {
             {
                 try
                 {
-                    service.SaveClientOrders(new ReportBindingModel
+                    service.SaveClientAllBaskets(new ReportBindingModel
                     {
                         FileName = sfd.FileName,
                         DateFrom = dateTimePickerFrom.Value,
                         DateTo = dateTimePickerTo.Value
-                    });
+                    }, 0);
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 }

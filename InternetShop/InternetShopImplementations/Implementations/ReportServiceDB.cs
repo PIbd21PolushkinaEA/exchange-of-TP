@@ -16,16 +16,16 @@ namespace InternetShopImplementations.Implementations
 {
     public class ReportServiceDB : IReportService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public ReportServiceDB(AbstractDbContext context)
+        public ReportServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }
 
         public ReportServiceDB()
         {
-            this.context = new AbstractDbContext();
+            this.context = new AbstractWebDbContext();
         }
 
         public List<ClientBasketViewModel> GetClientBaskets(ReportBindingModel model, int ClientId)

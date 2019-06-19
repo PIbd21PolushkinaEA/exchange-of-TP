@@ -12,9 +12,9 @@ namespace InternetShopImplementations.Implementations
 {
     public class ComponentServiceDB : IComponentService
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public ComponentServiceDB(AbstractDbContext context)
+        public ComponentServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }

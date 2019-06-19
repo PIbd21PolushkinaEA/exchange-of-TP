@@ -13,72 +13,74 @@ namespace InternetShopImplementations.Implementations
 {
     public class MainClientServiceDB : IMainClientServise
     {
-        private AbstractDbContext context;
+        private AbstractWebDbContext context;
 
-        public MainClientServiceDB(AbstractDbContext context)
+        public MainClientServiceDB(AbstractWebDbContext context)
         {
             this.context = context;
         }
 
         public MainClientServiceDB()
         {
-            this.context = new AbstractDbContext();
+            this.context = new AbstractWebDbContext();
         }
 
         public List<BasketViewModel> GetList()
         {
-            List<BasketViewModel> result = context.Baskets.Select(rec =>
-            new BasketViewModel
-            {
-                Id = rec.Id,
-                ClientId = rec.ClientId,
-                NameBuy = rec.NameBuy,
-                CountOfChoosedProducts = rec.CountOfChoosedProducts,
-                SumOfChoosedProducts = rec.SumOfChoosedProducts,
-                IsReserved = rec.IsReserved,
-                DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
-                SqlFunctions.DateName("mm", rec.DateCreate) + " " +
-                SqlFunctions.DateName("yyyy", rec.DateCreate),
-                ProductsBasket = context.ProductsBasket
-                    .Where(recPC => recPC.BasketId == rec.Id)
-                    .Select(recPC => new ProductBasketViewModel
-                    {
-                        Id = recPC.Id,
-                        ProductId = recPC.ProductId,
-                        BasketId = recPC.BasketId,
-                        ProductName = recPC.Product.ProductName,
-                        Count = recPC.Count
-                    }).ToList()
-            }).ToList();
-            return result;
+            //List<BasketViewModel> result = context.Baskets.Select(rec =>
+            //new BasketViewModel
+            //{
+            //    Id = rec.Id,
+            //    ClientId = rec.ClientId,
+            //    NameBuy = rec.NameBuy,
+            //    CountOfChoosedProducts = rec.CountOfChoosedProducts,
+            //    SumOfChoosedProducts = rec.SumOfChoosedProducts,
+            //    IsReserved = rec.IsReserved,
+            //    DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
+            //    SqlFunctions.DateName("mm", rec.DateCreate) + " " +
+            //    SqlFunctions.DateName("yyyy", rec.DateCreate),
+            //    ProductsBasket = context.ProductsBasket
+            //        .Where(recPC => recPC.BasketId == rec.Id)
+            //        .Select(recPC => new ProductBasketViewModel
+            //        {
+            //            Id = recPC.Id,
+            //            ProductId = recPC.ProductId,
+            //            BasketId = recPC.BasketId,
+            //            ProductName = recPC.Product.ProductName,
+            //            Count = recPC.Count
+            //        }).ToList()
+            //}).ToList();
+            //return result;
+            return null;
         }
 
         public List<BasketViewModel> GetListBuy(int ClientId)
         {
-            List<BasketViewModel> result = context.Baskets.
-                Where(rec => rec.ClientId == ClientId).
-                Select(rec => new BasketViewModel
-                {
-                    Id = rec.Id,
-                    ClientId = rec.ClientId,
-                    NameBuy = rec.NameBuy,
-                    SumOfChoosedProducts = rec.SumOfChoosedProducts,
-                    IsReserved = rec.IsReserved,
-                    DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
-                    SqlFunctions.DateName("mm", rec.DateCreate) + " " +
-                    SqlFunctions.DateName("yyyy", rec.DateCreate),
-                    ProductsBasket = context.ProductsBasket
-                    .Where(recPC => recPC.BasketId == rec.Id)
-                    .Select(recPC => new ProductBasketViewModel
-                    {
-                        Id = recPC.Id,
-                        ProductId = recPC.ProductId,
-                        BasketId = recPC.BasketId,
-                        ProductName = recPC.Product.ProductName,
-                        Count = recPC.Count,
-                    }).ToList()
-                }).ToList();
-            return result;
+            //List<BasketViewModel> result = context.Baskets.
+            //    Where(rec => rec.ClientId == ClientId).
+            //    Select(rec => new BasketViewModel
+            //    {
+            //        Id = rec.Id,
+            //        ClientId = rec.ClientId,
+            //        NameBuy = rec.NameBuy,
+            //        SumOfChoosedProducts = rec.SumOfChoosedProducts,
+            //        IsReserved = rec.IsReserved,
+            //        DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
+            //        SqlFunctions.DateName("mm", rec.DateCreate) + " " +
+            //        SqlFunctions.DateName("yyyy", rec.DateCreate),
+            //        ProductsBasket = context.ProductsBasket
+            //        .Where(recPC => recPC.BasketId == rec.Id)
+            //        .Select(recPC => new ProductBasketViewModel
+            //        {
+            //            Id = recPC.Id,
+            //            ProductId = recPC.ProductId,
+            //            BasketId = recPC.BasketId,
+            //            ProductName = recPC.Product.ProductName,
+            //            Count = recPC.Count,
+            //        }).ToList()
+            //    }).ToList();
+            //return result;
+            return null;
         }
         public BasketViewModel GetElement(int id)
         {
@@ -126,7 +128,7 @@ namespace InternetShopImplementations.Implementations
                         ClientId = model.ClientId,
                         NameBuy = model.NameBuy,
                         SumOfChoosedProducts = model.SumOfChoosedProducts,
-                        DateCreate = DateTime.Now
+                        //DateCreate = DateTime.Now
                     };
                     context.Baskets.Add(element);
                     context.SaveChanges();
