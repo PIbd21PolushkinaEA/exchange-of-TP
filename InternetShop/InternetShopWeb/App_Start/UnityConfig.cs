@@ -44,13 +44,13 @@ namespace InternetShopWeb.App_Start {
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<DbContext, AbstractWebDbContext>(new HierarchicalLifetimeManager());
+            container.RegisterType<DbContext, AbstractDbContext>(new HierarchicalLifetimeManager());
             container.RegisterType<IClientService, ClientServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IComponentService, ComponentServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IProductService, ProductServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IMainClientServise, MainClientServiceDB>(new HierarchicalLifetimeManager());
-            container.RegisterType<IBasketService, BasketServiceDB>(new HierarchicalLifetimeManager());
             container.RegisterType<IRequestService, RequestServiceDB>(new HierarchicalLifetimeManager());
+            container.RegisterType<IReportService, ReportServiceDB>(new HierarchicalLifetimeManager());
         }
     }
 }

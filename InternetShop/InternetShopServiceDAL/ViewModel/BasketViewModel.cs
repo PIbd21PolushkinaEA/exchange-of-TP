@@ -12,7 +12,9 @@ namespace InternetShopServiceDAL.ViewModel {
 
         public int SumOfChoosedProducts { get; set; }
 
-        public string ProductName { get; set; }
+        public bool IsReserved { get; set; }
+
+        public string DateCreate { get; set; }
 
         public List<ProductBasketViewModel> ProductsBasket { get; set; }
     }

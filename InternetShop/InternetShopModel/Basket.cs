@@ -18,6 +18,10 @@ namespace InternetShopModel {
         public DateTime DateCreate { get; set; }
         public DateTime? DateImplement { get; set; }
 
+        public bool IsReserved { get; set; }
+
+        public DateTime DateCreate { get; set; }
+
         public virtual Client Client { get; set; }
 
         [ForeignKey("BasketId")] public virtual List<ProductBasket> ProductsBasket { get; set; }

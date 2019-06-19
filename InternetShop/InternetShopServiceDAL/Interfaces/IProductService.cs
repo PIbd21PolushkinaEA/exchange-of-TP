@@ -6,6 +6,8 @@ namespace InternetShopServiceDAL.Interfaces {
     public interface IProductService {
         List<ProductViewModel> GetList();
 
+        List<ProductViewModel> GetAvailableList();
+
         ProductViewModel GetElement(int id);
 
         void AddElement(ProductBindingModel model);

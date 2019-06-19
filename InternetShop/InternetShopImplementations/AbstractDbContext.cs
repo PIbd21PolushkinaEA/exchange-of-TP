@@ -1,16 +1,21 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.SqlServer;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.Entity;
 using InternetShopModel;
-
-namespace InternetShopImplementations {
-    public class AbstractWebDbContext : DbContext {
-        public AbstractWebDbContext() : base("AbstractWebDbContext") {
+namespace InternetShopImplementations
+{
+    public class AbstractDbContext : DbContext
+    {
+        public AbstractDbContext() : base("AbstractDbContext")
+        {
             //настройки конфигурации для entity            
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-            var ensureDLLIsCopied = SqlProviderServices.Instance;
+            var ensureDLLIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
-
         public virtual DbSet<Client> Clients { get; set; }
 
         public virtual DbSet<Request> Requests { get; set; }
@@ -26,5 +31,6 @@ namespace InternetShopImplementations {
         public virtual DbSet<ProductBasket> ProductsBasket { get; set; }
 
         public virtual DbSet<RequestComponent> RequestComponents { get; set; }
+        
     }
 }

@@ -10,7 +10,7 @@
 namespace InternetShopWeb {
     
     
-    public partial class FormMainClient {
+    public partial class FormBuy {
         
         /// <summary>
         /// form1 элемент управления.
@@ -22,66 +22,39 @@ namespace InternetShopWeb {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ButtonProduct элемент управления.
+        /// textBoxName элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonProduct;
+        protected global::System.Web.UI.WebControls.TextBox textBoxName;
         
         /// <summary>
-        /// ButtonReport элемент управления.
+        /// textBoxPrice элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonReport;
+        protected global::System.Web.UI.WebControls.TextBox textBoxPrice;
         
         /// <summary>
-        /// ButtonCreateBuy элемент управления.
+        /// dataGridView элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonCreateBuy;
+        protected global::System.Web.UI.WebControls.GridView dataGridView;
         
         /// <summary>
-        /// ButtonUpdBuy элемент управления.
+        /// ButtonCancel элемент управления.
         /// </summary>
         /// <remarks>
         /// Автоматически создаваемое поле.
         /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpdBuy;
-        
-        /// <summary>
-        /// ButtonMakeReservation элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonMakeReservation;
-        
-        /// <summary>
-        /// ButtonUpd элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonUpd;
-        
-        /// <summary>
-        /// dataGridView1 элемент управления.
-        /// </summary>
-        /// <remarks>
-        /// Автоматически создаваемое поле.
-        /// Для изменения переместите объявление поля из файла конструктора в файл кода программной части.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dataGridView1;
+        protected global::System.Web.UI.WebControls.Button ButtonCancel;
     }
 }

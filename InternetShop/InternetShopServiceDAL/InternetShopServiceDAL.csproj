@@ -57,23 +57,21 @@
     <Compile Include="BindingModels\RequestBindingModel.cs" />
     <Compile Include="BindingModels\ClientBindingModel.cs" />
     <Compile Include="BindingModels\RequestComponentBindingModel.cs" />
-    <Compile Include="Interfaces\IBasketService.cs" />
     <Compile Include="Interfaces\IClientService.cs" />
     <Compile Include="Interfaces\IComponentService.cs" />
-    <Compile Include="Interfaces\IMainAdmin.cs" />
     <Compile Include="Interfaces\IMainClientServise.cs" />
     <Compile Include="Interfaces\IProductService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
     <Compile Include="Interfaces\IRequestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\BasketViewModel.cs" />
-    <Compile Include="ViewModel\ClientOrdersModel.cs" />
+    <Compile Include="ViewModel\ClientBasketViewModel.cs" />
     <Compile Include="ViewModel\ClientViewModel.cs" />
     <Compile Include="ViewModel\ComponentProductViewModel.cs" />
     <Compile Include="ViewModel\ComponentViewModel.cs" />
     <Compile Include="ViewModel\ProductBasketViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />
-    <Compile Include="ViewModel\RequestComponentViewModel.cs" />
+    <Compile Include="ViewModel\RequestComponentBindingModel.cs" />
     <Compile Include="ViewModel\RequestViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

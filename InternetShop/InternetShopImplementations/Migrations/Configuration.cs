@@ -1,12 +1,19 @@
-using System.Data.Entity.Migrations;
+namespace InternetShopImplementations.Migrations
+{
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
 
-namespace InternetShopImplementations.Migrations {
-    internal sealed class Configuration : DbMigrationsConfiguration<AbstractWebDbContext> {
-        public Configuration() {
+    internal sealed class Configuration : DbMigrationsConfiguration<InternetShopImplementations.AbstractDbContext>
+    {
+        public Configuration()
+        {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(AbstractWebDbContext context) {
+        protected override void Seed(InternetShopImplementations.AbstractDbContext context)
+        {
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

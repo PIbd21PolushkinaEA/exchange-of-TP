@@ -1,20 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.ViewModel;
 
-namespace InternetShopServiceDAL.Interfaces {
-    public interface IMainClientServise {
+namespace InternetShopServiceDAL.Interfaces
+{
+    public interface IMainClientServise
+    {
         //покупки
         List<BasketViewModel> GetList();
 
+        List<BasketViewModel> GetListBuy(int ClientId);
+
         BasketViewModel GetElement(int id);
 
-        void AddElement(BasketBindingModel model);
+        void AddBuy(BasketBindingModel model);
 
-        void UpdElement(BasketBindingModel model);
+        void UpdBuy(BasketBindingModel model);
 
-        void DelElement(int id);
+        void DelBuy(int id);
 
-        void MakeReservation(ProductBasketBindingModel model);
+        void MakeReservation(int id);
+
+        void SendEmail(string mailAddress, string subject, string text, string path);
     }
 }
