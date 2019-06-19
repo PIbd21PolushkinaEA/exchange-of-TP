@@ -25,95 +25,96 @@ namespace InternetShopView {
 
         private int? id;
 
-        public FormComponentProduct(IComponentService service) {
+        public FormComponentProduct(IComponentService service)
+        {
             InitializeComponent();
             this.service = service;
         }
 
-        private void FormProductComponent_Load(object sender, EventArgs e) {
-            try {
-                if ( id.HasValue ) {
-                    ComponentViewModel view = service.GetElement(id.Value);
-                    List<ComponentViewModel> list = service.GetList();
-                    if ( view != null ) {
-                        initComboBox(list);
-                        comboBoxManuf.Enabled = true;
-                        comboBoxBrand.Enabled = true;
-                        comboBoxDetail.SelectedValue = view.Id;
-                        comboBoxManuf.SelectedValue = view.Id;
-                        comboBoxBrand.SelectedValue = view.Id;
-                        textBoxCount.Text = "0";
-                    }
+        private void FormProductComponent_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                List<ComponentViewModel> list = service.GetList();
+                if (list != null)
+                {
+                    dataGridViewComponents.DataSource = list;
+                    dataGridViewComponents.Columns[0].Visible = false;
+                    dataGridViewComponents.Columns[6].Visible = false;
+                    dataGridViewComponents.Columns[0].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
                 }
-                else {
-                    List<ComponentViewModel> list = service.GetList();
-
-                    initComboBox(list);
+                if (model != null)
+                {
+                    textBoxCount.Text = model.Count.ToString();
                 }
             }
-            catch ( Exception ex ) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             }
-
-            if ( model != null ) {
-                comboBoxDetail.SelectedValue = model.ComponentId;
-                textBoxCount.Text = model.Count.ToString();
-            }
         }
 
-        private void save_Button_Click(object sender, EventArgs e) {
-            if ( string.IsNullOrEmpty(textBoxCount.Text) ) {
+        private void save_Button_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxCount.Text))
+            {
                 MessageBox.Show("Заполните поле Количество", "Ошибка",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if ( comboBoxDetail.SelectedValue == null ) {
-                MessageBox.Show("Выберите компонент", "Ошибка", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-                return;
-            }
-            ComponentViewModel element = service.GetElement(Convert.ToInt32(comboBoxBrand.SelectedValue));
-            try {
-                if ( model == null ) {
-                    model = new ComponentProductViewModel {
-                        ComponentId = element.Id,
-                        ComponentName = element.Name,
-                        Manuf = element.Manufacturer,
-                        Brand = element.Brand,
-                        ComponentRating = element.Rating,
-                        Count = Convert.ToInt32(textBoxCount.Text)
-                    };
+            try
+            {
+                if (model == null)
+                {
+                    if (dataGridViewComponents.SelectedRows.Count == 1)
+                    {
+                        ComponentViewModel element = service.GetElement(Convert.ToInt32(dataGridViewComponents.SelectedRows[0].Cells[0].Value));
+                        model = new ComponentProductViewModel
+                        {
+                            ComponentId = element.Id,
+                            ComponentName = element.Name,
+                            Manuf = element.Manufacturer,
+                            Brand = element.Brand,
+                            ComponentRating = element.Rating,
+                            Count = int.Parse(textBoxCount.Text)
+                        };
+                    }
                 }
-                else {
-                    model.ComponentName = comboBoxDetail.Text;
-                    model.Manuf = comboBoxManuf.Text;
-                    model.Brand = comboBoxBrand.Text;
-                    model.ComponentRating = element.Rating;
-                    model.Count = Convert.ToInt32(textBoxCount.Text);
-                }
+                else
+                {
+                    if (dataGridViewComponents.SelectedRows.Count == 1)
+                    {
 
-                MessageBox.Show("Сохранение прошло успешно", "Сообщение",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ComponentViewModel element = service.GetElement(Convert.ToInt32(dataGridViewComponents.SelectedRows[0].Cells[0].Value));
+                        model = new ComponentProductViewModel
+                        {
+                            ComponentId = element.Id,
+                            ComponentName = element.Name,
+                            Manuf = element.Manufacturer,
+                            Brand = element.Brand,
+                            ComponentRating = element.Rating,
+                            Count = int.Parse(textBoxCount.Text)
+                        };
+                    }
+                    else MessageBox.Show("Выбрано больше 1 элемента", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch ( Exception ex ) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             }
         }
 
-        private void initComboBox(List<ComponentViewModel> list)
-        {
-            comboBoxDetail.DisplayMember = "Name";
-            comboBoxDetail.ValueMember = "Id";
-            comboBoxDetail.DataSource = list;
-            comboBoxDetail.SelectedItem = null;
-        }
 
-        private void cancel_Button_Click(object sender, EventArgs e) {
+        private void cancel_Button_Click(object sender, EventArgs e)
+        {
             DialogResult = DialogResult.Cancel;
             Close();
         }

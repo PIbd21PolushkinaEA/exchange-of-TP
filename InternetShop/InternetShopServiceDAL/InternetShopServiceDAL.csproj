@@ -68,6 +68,7 @@
     <Compile Include="ViewModel\ClientBasketViewModel.cs" />
     <Compile Include="ViewModel\ClientViewModel.cs" />
     <Compile Include="ViewModel\ComponentProductViewModel.cs" />
+    <Compile Include="ViewModel\ComponentsRequestViewModel.cs" />
     <Compile Include="ViewModel\ComponentViewModel.cs" />
     <Compile Include="ViewModel\ProductBasketViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />

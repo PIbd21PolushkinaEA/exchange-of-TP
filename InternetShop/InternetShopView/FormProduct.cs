@@ -44,6 +44,7 @@ namespace InternetShopView {
                 var form = Container.Resolve<FormComponentProduct>();
                 form.Model =
                _componentsProduct[dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex];
+                form.Id = dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex;
                 if ( form.ShowDialog() == DialogResult.OK ) {
                     _componentsProduct[dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex] =
                    form.Model;
@@ -57,9 +58,9 @@ namespace InternetShopView {
                 if ( MessageBox.Show("Удалить запись", "Вопрос", MessageBoxButtons.YesNo,
                      MessageBoxIcon.Question) == DialogResult.Yes ) {
                     int id =
-                        Convert.ToInt32(dataGridViewProducts.SelectedRows[0].Cells[0].Value);
+                        Convert.ToInt32(dataGridViewProducts.SelectedRows[0].Cells[1].Value);
                     try {
-                        service.DelElement(id);
+                        _componentsProduct.RemoveAt(dataGridViewProducts.SelectedRows[0].Cells[0].RowIndex);
                         LoadData();
                     }
                     catch ( Exception ex ) {

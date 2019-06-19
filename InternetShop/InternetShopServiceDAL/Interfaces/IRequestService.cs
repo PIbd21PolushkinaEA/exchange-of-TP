@@ -13,5 +13,6 @@ namespace InternetShopServiceDAL.Interfaces {
         void UpdElement(RequestBindingModel model);
 
         void DelElement(int id);
+        void CreateRequest(RequestBindingModel requestBindingModel, bool v);
     }
 }

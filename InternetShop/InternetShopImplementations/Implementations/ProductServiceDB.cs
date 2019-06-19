@@ -155,22 +155,6 @@ namespace InternetShopImplementations.Implementations
                     context.Products.Add(element);
                     context.SaveChanges();
                     // убираем дубли по компонентам    
-                    List<ComponentProduct> componentProducts = new List<ComponentProduct>();
-                    for (int i = 0; i < model.ComponentsProduct.Count; i++)
-                    {
-                        ComponentProductBindingModel componentProduct = model.ComponentsProduct[i];
-                        componentProducts.Add(new ComponentProduct
-                        {
-                            Id = componentProduct.Id,
-                            ProductId = element.Id,
-                            ComponentId = componentProduct.ComponentId,
-                            ComponentName = componentProduct.ComponentName,
-                            Manuf = componentProduct.Manuf,
-                            Brand = componentProduct.Brand,
-                            ComponentRating = componentProduct.ComponentRating,
-                            Count = componentProduct.Count
-                        });
-                    }
                     var groupComponents = model.ComponentsProduct
                         .GroupBy(rec => rec.ComponentId)
                         .Select(rec => new
