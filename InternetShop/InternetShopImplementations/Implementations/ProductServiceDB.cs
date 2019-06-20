@@ -8,66 +8,53 @@ using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
 
-namespace InternetShopImplementations.Implementations
-{
-    public class ProductServiceDB : IProductService
-    {
+namespace InternetShopImplementations.Implementations {
+    public class ProductServiceDB : IProductService {
         private AbstractWebDbContext context;
 
-        public ProductServiceDB(AbstractWebDbContext context)
-        {
+        public ProductServiceDB(AbstractWebDbContext context) {
             this.context = context;
         }
-        public ProductServiceDB()
-        {
-            this.context = new AbstractWebDbContext();
-        }
-        public List<ProductViewModel> GetList()
-        {
-            List<ProductViewModel> result = context.Products.Select(rec =>
-            new ProductViewModel
-            {
-                Id = rec.Id,
-                ProductName = rec.ProductName,
-                Price = rec.Price,
-                ProductsBasket = context.ProductsBasket
-                .Where(recPC => recPC.ProductId == rec.Id)
-                .Select(recPC => new ProductBasketViewModel
-                {
-                    Id = recPC.Id,
-                    ProductId = recPC.ProductId,
-                    BasketId = recPC.BasketId,
-                    Count = recPC.Count
-                }).ToList(),
 
-                ComponentsProduct = context.ComponentsProduct
-                .Where(recPC => recPC.ProductId == rec.Id)
-                .Select(recPC => new ComponentProductViewModel
-                {
-                    Id = recPC.Id,
-                    ProductId = recPC.ProductId,
-                    ComponentId = recPC.ComponentId,
-                    ComponentName = recPC.ComponentName,
-                    Manuf = recPC.Manuf,
-                    Brand = recPC.Brand,
-                    ComponentRating = recPC.ComponentRating,
-                    Count = recPC.Count
-                }).ToList()
-            }).ToList();
+        public List<ProductViewModel> GetList() {
+            List<ProductViewModel> result = context.Products.Select(rec =>
+                new ProductViewModel {
+                    Id = rec.Id,
+                    ProductName = rec.ProductName,
+                    Price = rec.Price,
+                    ProductsBasket = context.ProductsBasket
+                        .Where(recPC => recPC.ProductId == rec.Id)
+                        .Select(recPC => new ProductBasketViewModel {
+                            Id = recPC.Id,
+                            ProductId = recPC.ProductId,
+                            BasketId = recPC.BasketId,
+                            Count = recPC.Count
+                        }).ToList(),
+
+                    ComponentsProduct = context.ComponentsProduct
+                        .Where(recPC => recPC.ProductId == rec.Id)
+                        .Select(recPC => new ComponentProductViewModel {
+                            Id = recPC.Id,
+                            ProductId = recPC.ProductId,
+                            ComponentId = recPC.ComponentId,
+                            ComponentName = recPC.ComponentName,
+                            Manuf = recPC.Manuf,
+                            Brand = recPC.Brand,
+                            ComponentRating = recPC.ComponentRating,
+                            Count = recPC.Count
+                        }).ToList()
+                }).ToList();
             return result;
         }
 
-        public List<ProductViewModel> GetAvailableList()
-        {
-            List<ProductViewModel> result = context.Products.Select(rec => new ProductViewModel
-            {
+        public List<ProductViewModel> GetAvailableList() {
+            List<ProductViewModel> result = context.Products.Select(rec => new ProductViewModel {
                 Id = rec.Id,
                 ProductName = rec.ProductName,
                 Price = rec.Price,
                 ComponentsProduct = context.ComponentsProduct
                     .Where(recPM => recPM.ProductId == rec.Id)
-                    .Select(recPM => new ComponentProductViewModel
-                    {
+                    .Select(recPM => new ComponentProductViewModel {
                         Id = recPM.Id,
                         ComponentId = recPM.ComponentId,
                         ProductId = recPM.ProductId,
@@ -80,81 +67,130 @@ namespace InternetShopImplementations.Implementations
             }).ToList();
 
             List<ProductViewModel> neww = new List<ProductViewModel>();
-            foreach (var pr in result)
-            {
+            foreach ( var pr in result ) {
                 bool add = false;
-                foreach (var m in pr.ComponentsProduct)
-                {
-                    if (m.Count <= context.Components.FirstOrDefault(rec => rec.Id == m.ComponentId).CountOfAvailable)
-                    {
+                foreach ( var m in pr.ComponentsProduct ) {
+                    if ( context.Components != null && m.Count <= context.Components
+                             .FirstOrDefault(rec => rec.Id == m.ComponentId)
+                             .CountOfAvailable ) {
                         add = true;
                     }
                 }
-                if (add)
-                {
+
+                if ( add ) {
                     neww.Add(pr);
                 }
             }
+
             return neww;
         }
 
-        public ProductViewModel GetElement(int id)
-        {
+        public ProductViewModel GetElement(int id) {
             Product element = context.Products.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
-            {
-                return new ProductViewModel
-                {
+            if ( element != null ) {
+                return new ProductViewModel {
                     Id = element.Id,
                     ProductName = element.ProductName,
                     Price = element.Price,
                     ProductsBasket = context.ProductsBasket
-                .Where(recPC => recPC.ProductId == element.Id)
-                .Select(recPC => new ProductBasketViewModel
-                {
-                    Id = recPC.Id,
-                    ProductId = recPC.ProductId,
-                    BasketId = recPC.BasketId,
-                    Count = recPC.Count
-                }).ToList(),
+                        .Where(recPC => recPC.ProductId == element.Id)
+                        .Select(recPC => new ProductBasketViewModel {
+                            Id = recPC.Id,
+                            ProductId = recPC.ProductId,
+                            BasketId = recPC.BasketId,
+                            Count = recPC.Count
+                        }).ToList(),
 
                     ComponentsProduct = context.ComponentsProduct
-                .Where(recPC => recPC.ProductId == element.Id)
-                .Select(recPC => new ComponentProductViewModel
-                {
-                    Id = recPC.Id,
-                    ProductId = recPC.ProductId,
-                    ComponentId = recPC.ComponentId,
-                    ComponentName = recPC.ComponentName,
-                    Manuf = recPC.Manuf,
-                    Brand = recPC.Brand,
-                    ComponentRating = recPC.ComponentRating,
-                    Count = recPC.Count
-                }).ToList()
+                        .Where(recPC => recPC.ProductId == element.Id)
+                        .Select(recPC => new ComponentProductViewModel {
+                            Id = recPC.Id,
+                            ProductId = recPC.ProductId,
+                            ComponentId = recPC.ComponentId,
+                            ComponentName = recPC.ComponentName,
+                            Manuf = recPC.Manuf,
+                            Brand = recPC.Brand,
+                            ComponentRating = recPC.ComponentRating,
+                            Count = recPC.Count
+                        }).ToList()
                 };
             }
+
             throw new Exception("Элемент не найден");
         }
 
-        public void AddElement(ProductBindingModel model)
-        {
-            using (var transaction = context.Database.BeginTransaction())
+        public void AddElement(ProductBindingModel model) {
+            /*using ( var transaction = context.Database.BeginTransaction() ) {
+                try {
+                    Product element = context.Products.FirstOrDefault(rec => rec.ProductName == model.ProductName);
+                    if ( element != null ) {
+                        throw new Exception("Уже есть товар с таким названием");
+                    }
+
+                    element = new Product {
+                        ProductName = model.ProductName,
+                        Price = model.Price,
+                    };
+                    context.Products.Add(element);
+                    /*List<ComponentProduct> list = new List<ComponentProduct>();
+                    for ( int i = 0; i < model.ComponentsProduct.Count; i++ ) {
+                        ComponentProductBindingModel elem = model.ComponentsProduct[i];
+                        list.Add(new ComponentProduct {
+                            Id = elem.Id,
+                            ProductId = element.Id,
+                            ComponentId = elem.ComponentId,
+                            ComponentName = elem.ComponentName,
+                            Manuf = elem.Manuf,
+                            Brand = elem.Brand,
+                            ComponentRating = elem.ComponentRating,
+                            Count = elem.Count
+                        });
+                    }
+
+                    element.ComponentsProduct = list;
+                    context.Products.Add(element);
+                    context.SaveChanges();#1#
+                    // убираем дубли по компонентам    
+                    var groupComponents = model.ComponentsProduct
+                        .GroupBy(rec => rec.ComponentId)
+                        .Select(rec => new {
+                            ComponentId = rec.Key,
+                            Count = rec.Sum(r => r.Count)
+                        });
+                    // добавляем компоненты     
+                    foreach ( var groupComponent in groupComponents ) {
+                        context.ComponentsProduct.Add(new ComponentProduct {
+                            ProductId = element.Id,
+                            ComponentId = groupComponent.ComponentId,
+                            Count = groupComponent.Count
+                        });
+                        context.SaveChanges();
+                    }
+
+                    transaction.Commit();
+                }
+                catch ( Exception ) {
+                    transaction.Rollback();
+                    throw;
+                }
+            }*/
+            using(var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
                     Product element = context.Products.FirstOrDefault(rec => rec.ProductName == model.ProductName);
                     if (element != null)
                     {
-                        throw new Exception("Уже есть товар с таким названием");
+                        throw new Exception("Уже есть тур с таким названием");
                     }
                     element = new Product
                     {
                         ProductName = model.ProductName,
-                        Price = model.Price,
+                        Price =  model.Price
                     };
                     context.Products.Add(element);
                     context.SaveChanges();
-                    // убираем дубли по компонентам    
+
                     var groupComponents = model.ComponentsProduct
                         .GroupBy(rec => rec.ComponentId)
                         .Select(rec => new
@@ -162,13 +198,18 @@ namespace InternetShopImplementations.Implementations
                             ComponentId = rec.Key,
                             Count = rec.Sum(r => r.Count)
                         });
-                    // добавляем компоненты     
-                    foreach (var groupComponent in groupComponents)
-                    {
+
+                    foreach (var groupComponent in groupComponents) {
+                        Component elem = context.Components.SingleOrDefault(component =>
+                            component.Id == groupComponent.ComponentId);
                         context.ComponentsProduct.Add(new ComponentProduct
                         {
                             ProductId = element.Id,
                             ComponentId = groupComponent.ComponentId,
+                            Manuf = elem?.Manufacturer,
+                            Brand = elem?.Brand,
+                            ComponentName = elem?.Name,
+                            ComponentRating = elem.Rating,
                             Count = groupComponent.Count
                         });
                         context.SaveChanges();
@@ -183,22 +224,20 @@ namespace InternetShopImplementations.Implementations
             }
         }
 
-        public void UpdElement(ProductBindingModel model)
-        {
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    Product element = context.Products.FirstOrDefault(rec => rec.ProductName == model.ProductName && rec.Id != model.Id);
-                    if (element != null)
-                    {
+        public void UpdElement(ProductBindingModel model) {
+            using ( var transaction = context.Database.BeginTransaction() ) {
+                try {
+                    Product element = context.Products.FirstOrDefault(rec =>
+                        rec.ProductName == model.ProductName && rec.Id != model.Id);
+                    if ( element != null ) {
                         throw new Exception("Уже есть товар с таким названием");
                     }
+
                     element = context.Products.FirstOrDefault(rec => rec.Id == model.Id);
-                    if (element == null)
-                    {
+                    if ( element == null ) {
                         throw new Exception("Элемент не найден");
                     }
+
                     element.ProductName = model.ProductName;
                     element.Price = model.Price;
                     context.SaveChanges();
@@ -206,37 +245,35 @@ namespace InternetShopImplementations.Implementations
                     // обновляем существуюущие компоненты  
                     var compIds = model.ComponentsProduct.Select(rec => rec.ComponentId).Distinct();
                     var updateComponents = context.ComponentsProduct.Where(rec => rec.ProductId == model.Id &&
-                    compIds.Contains(rec.ComponentId));
-                    foreach (var updateComponent in updateComponents)
-                    {
-                        updateComponent.Count = model.ComponentsProduct.FirstOrDefault(rec => rec.Id == updateComponent.Id).Count;
+                                                                                  compIds.Contains(rec.ComponentId));
+                    foreach ( var updateComponent in updateComponents ) {
+                        updateComponent.Count = model.ComponentsProduct
+                            .FirstOrDefault(rec => rec.Id == updateComponent.Id).Count;
                     }
+
                     context.SaveChanges();
-                    context.ComponentsProduct.RemoveRange(context.ComponentsProduct.Where(rec => rec.ProductId == model.Id &&
-                    !compIds.Contains(rec.ComponentId)));
+                    context.ComponentsProduct.RemoveRange(context.ComponentsProduct.Where(rec =>
+                        rec.ProductId == model.Id &&
+                        !compIds.Contains(rec.ComponentId)));
                     context.SaveChanges();
                     // новые записи                 
                     var groupComponents = model.ComponentsProduct
                         .Where(rec => rec.Id == 0)
                         .GroupBy(rec => rec.ComponentId)
-                        .Select(rec => new
-                        {
+                        .Select(rec => new {
                             ComponentId = rec.Key,
                             Count = rec.Sum(r => r.Count)
                         });
-                    foreach (var groupComponent in groupComponents)
-                    {
+                    foreach ( var groupComponent in groupComponents ) {
                         ComponentProduct elementPC = context.ComponentsProduct
-                            .FirstOrDefault(rec => rec.ProductId == model.Id && rec.ComponentId == groupComponent.ComponentId);
-                        if (elementPC != null)
-                        {
+                            .FirstOrDefault(rec =>
+                                rec.ProductId == model.Id && rec.ComponentId == groupComponent.ComponentId);
+                        if ( elementPC != null ) {
                             elementPC.Count += groupComponent.Count;
                             context.SaveChanges();
                         }
-                        else
-                        {
-                            context.ComponentsProduct.Add(new ComponentProduct
-                            {
+                        else {
+                            context.ComponentsProduct.Add(new ComponentProduct {
                                 ProductId = model.Id,
                                 ComponentId = groupComponent.ComponentId,
                                 Count = groupComponent.Count
@@ -244,34 +281,55 @@ namespace InternetShopImplementations.Implementations
                             context.SaveChanges();
                         }
                     }
+
+                    /*List<ComponentProduct> list = new List<ComponentProduct>();
+                    for ( int i = 0; i < model.ComponentsProduct.Count; i++ ) {
+                        if ( model.ComponentsProduct[i].ProductId != 0 ) {
+                            continue;
+                        }
+                        ComponentProductBindingModel elem = model.ComponentsProduct[i];
+                        list.Add(new ComponentProduct {
+                            Id = elem.Id,
+                            ProductId = element.Id,
+                            ComponentId = elem.ComponentId,
+                            ComponentName = elem.ComponentName,
+                            Manuf = elem.Manuf,
+                            Brand = elem.Brand,
+                            ComponentRating = elem.ComponentRating,
+                            Count = elem.Count
+                        });
+                    }
+
+                    element.ComponentsProduct = list;
+                    context.Products.Add(element);
+                    context.SaveChanges();*/
                     transaction.Commit();
                 }
-                catch (Exception)
-                {
+                catch ( Exception ) {
                     transaction.Rollback();
                     throw;
                 }
             }
         }
 
-        public void DelElement(int id)
-        {
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    Product element = context.Products.FirstOrDefault(rec => rec.Id == id); if (element != null)
-                    {
+        public void DelElement(int id) {
+            using ( var transaction = context.Database.BeginTransaction() ) {
+                try {
+                    Product element = context.Products.FirstOrDefault(rec => rec.Id == id);
+                    if ( element != null ) {
                         // удаяем записи по компонентам при удалении изделия       
-                        context.ComponentsProduct.RemoveRange(context.ComponentsProduct.Where(rec => rec.ProductId == id));
+                        context.ComponentsProduct.RemoveRange(
+                        context.ComponentsProduct.Where(rec => rec.ProductId == id));
                         context.Products.Remove(element);
                         context.SaveChanges();
                     }
-                    else { throw new Exception("Элемент не найден"); }
+                    else {
+                        throw new Exception("Элемент не найден");
+                    }
+
                     transaction.Commit();
                 }
-                catch (Exception)
-                {
+                catch ( Exception ) {
                     transaction.Rollback();
                     throw;
                 }
