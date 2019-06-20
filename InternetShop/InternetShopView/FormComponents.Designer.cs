@@ -37,7 +37,7 @@
             // 
             // add_Button
             // 
-            this.add_Button.Location = new System.Drawing.Point(629, 57);
+            this.add_Button.Location = new System.Drawing.Point(720, 64);
             this.add_Button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.add_Button.Name = "add_Button";
             this.add_Button.Size = new System.Drawing.Size(88, 27);
@@ -48,7 +48,7 @@
             // 
             // change_button
             // 
-            this.change_button.Location = new System.Drawing.Point(629, 107);
+            this.change_button.Location = new System.Drawing.Point(720, 114);
             this.change_button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.change_button.Name = "change_button";
             this.change_button.Size = new System.Drawing.Size(88, 27);
@@ -59,7 +59,7 @@
             // 
             // Update_button
             // 
-            this.Update_button.Location = new System.Drawing.Point(629, 159);
+            this.Update_button.Location = new System.Drawing.Point(720, 166);
             this.Update_button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Update_button.Name = "Update_button";
             this.Update_button.Size = new System.Drawing.Size(88, 27);
@@ -70,7 +70,7 @@
             // 
             // Delete_button
             // 
-            this.Delete_button.Location = new System.Drawing.Point(629, 213);
+            this.Delete_button.Location = new System.Drawing.Point(720, 220);
             this.Delete_button.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Delete_button.Name = "Delete_button";
             this.Delete_button.Size = new System.Drawing.Size(88, 27);
@@ -86,14 +86,14 @@
             this.dataGridViewComponents.Location = new System.Drawing.Point(15, 15);
             this.dataGridViewComponents.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridViewComponents.Name = "dataGridViewComponents";
-            this.dataGridViewComponents.Size = new System.Drawing.Size(574, 346);
+            this.dataGridViewComponents.Size = new System.Drawing.Size(697, 354);
             this.dataGridViewComponents.TabIndex = 4;
             // 
             // FormComponents
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(761, 381);
+            this.ClientSize = new System.Drawing.Size(821, 381);
             this.Controls.Add(this.dataGridViewComponents);
             this.Controls.Add(this.Delete_button);
             this.Controls.Add(this.Update_button);

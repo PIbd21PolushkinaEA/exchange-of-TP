@@ -1,129 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using InternetShopModel;
-using InternetShopServiceDAL.Interfaces;
-using InternetShopServiceDAL.BindingModels;
-using InternetShopServiceDAL.ViewModel;
-using InternetShopServiceDAL;
 using System.IO;
-using Microsoft.Office.Interop.Word;
+using System.Linq;
+using System.Reflection;
+using InternetShopModel;
+using InternetShopServiceDAL.BindingModels;
+using InternetShopServiceDAL.Interfaces;
+using InternetShopServiceDAL.ViewModel;
 using Microsoft.Office.Interop.Excel;
-using System.Configuration;
+using Microsoft.Office.Interop.Word;
+using Application = Microsoft.Office.Interop.Excel.Application;
+using Range = Microsoft.Office.Interop.Excel.Range;
+using XlBorderWeight = Microsoft.Office.Interop.Excel.XlBorderWeight;
+using XlColorIndex = Microsoft.Office.Interop.Excel.XlColorIndex;
+using XlHAlign = Microsoft.Office.Interop.Excel.XlHAlign;
+using XlLineStyle = Microsoft.Office.Interop.Excel.XlLineStyle;
+using XlVAlign = Microsoft.Office.Interop.Excel.XlVAlign;
 
-namespace InternetShopImplementations.Implementations
-{
-    public class RequestServiceDB : IRequestService
-    {
+namespace InternetShopImplementations.Implementations {
+    public class RequestServiceDB : IRequestService {
         private AbstractWebDbContext context;
-        
-        public RequestServiceDB(AbstractWebDbContext context)
-        {
+
+        public RequestServiceDB(AbstractWebDbContext context) {
             this.context = context;
         }
 
-        public void AddElement(RequestBindingModel model)
-        {
+        public void AddElement(RequestBindingModel model) {
             Request request = context.Requests.FirstOrDefault(rec => rec.Date ==
-            model.Date);
-            if (request != null)
-            {
+                                                                     model.Date);
+            if ( request != null ) {
                 throw new Exception("Уже есть заявка с такой датой");
             }
-            context.Requests.Add(new Request
-            {
+
+            context.Requests.Add(new Request {
                 Date = model.Date
-                
             });
             context.SaveChanges();
         }
 
-        public void CreateRequest(RequestBindingModel model, bool type)
-        {
-            using (var transaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    Request element = new Request
-                    {
+        public void CreateRequest(RequestBindingModel model, bool type) {
+            using ( var transaction = context.Database.BeginTransaction() ) {
+                try {
+                    Request element = new Request {
                         Date = model.Date
                     };
                     context.Requests.Add(element);
                     context.SaveChanges();
 
                     var groupComponents = model.RequestComponents
-                                                .GroupBy(rec => rec.ComponentID)
-                                                .Select(rec => new
-                                                {
-                                                    ComponentId = rec.Key,
-                                                    Count = rec.Sum(r => r.CountComponents)
-                                                });
-                    foreach (var groupComponent in groupComponents)
-                    {
-                        context.RequestComponents.Add(new RequestComponent
-                        {
-
+                        .GroupBy(rec => rec.ComponentID)
+                        .Select(rec => new {
+                            ComponentId = rec.Key,
+                            Count = rec.Sum(r => r.CountComponents)
+                        });
+                    foreach ( var groupComponent in groupComponents ) {
+                        context.RequestComponents.Add(new RequestComponent {
                             RequestId = element.Id,
                             ComponentId = groupComponent.ComponentId,
                             CountComponents = groupComponent.Count
                         });
                         context.SaveChanges();
 
-                        var reservation = context.Components.FirstOrDefault(rec => rec.Id == groupComponent.ComponentId);
+                        var reservation =
+                            context.Components.FirstOrDefault(rec => rec.Id == groupComponent.ComponentId);
                         reservation.CountOfAvailable += groupComponent.Count;
                         context.SaveChanges();
                     }
 
                     string typeMessage = "";
                     string fName = "";
-                    if (type)
-                    {
+                    if ( type ) {
                         RequestWord(model);
                         typeMessage = "word";
                         fName = "C:\\Users\\User\\Documents\\file.doc";
                     }
-                    else
-                    {
+                    else {
                         RequestExcel(model);
                         typeMessage = "xls";
                         fName = "C:\\Users\\User\\Documents\\file.xls";
                     }
-                    Mail.SendEmail(null, "Заявка на брони", "Заявка на брони в формате " + typeMessage, fName);
+
+                    //Mail.SendEmail(null, "Заявка на брони", "Заявка на брони в формате " + typeMessage, fName);
                     transaction.Commit();
                 }
-                catch (Exception)
-                {
+                catch ( Exception ) {
                     transaction.Rollback();
                     throw;
                 }
             }
         }
 
-        private void RequestExcel(RequestBindingModel model)
-        {
-            var excel = new Microsoft.Office.Interop.Excel.Application();
-            try
-            {
+        private void RequestExcel(RequestBindingModel model) {
+            var excel = new Application();
+            try {
                 //или создаем excel-файл, или открываем существующий
-                if (File.Exists("C:\\Users\\User\\Documents\\file.xls"))
-                {
+                if ( File.Exists("C:\\Users\\User\\Documents\\file.xls") ) {
                     excel.Workbooks.Open("C:\\Users\\User\\Documents\\file.xls", Type.Missing, Type.Missing,
-                   Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                   Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
-                else
-                {
+                else {
                     excel.SheetsInNewWorkbook = 1;
                     excel.Workbooks.Add(Type.Missing);
-                    excel.Workbooks[1].SaveAs("C:\\Users\\Public\\Documents\\file.xls", XlFileFormat.xlExcel8,
+                    excel.Workbooks[1].SaveAs("C:\\Users\\User\\Documents\\file.xls", XlFileFormat.xlExcel8,
                     Type.Missing, Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 }
+
                 Sheets excelsheets = excel.Workbooks[1].Worksheets;
                 //Получаем ссылку на лист
-                var excelworksheet = (Worksheet)excelsheets.get_Item(1);
+                var excelworksheet = (Worksheet) excelsheets.get_Item(1);
                 //очищаем ячейки
                 excelworksheet.Cells.Clear();
                 //настройки страницы
@@ -131,79 +117,80 @@ namespace InternetShopImplementations.Implementations
                 excelworksheet.PageSetup.CenterHorizontally = true;
                 excelworksheet.PageSetup.CenterVertically = true;
                 //получаем ссылку на первые 3 ячейки
-                Microsoft.Office.Interop.Excel.Range excelcells = excelworksheet.get_Range("A1", "B1");
+                Range excelcells = excelworksheet.get_Range("A1", "B1");
                 //объединяем их
                 excelcells.Merge(Type.Missing);
                 //задаем текст, настройки шрифта и ячейки
                 excelcells.Font.Bold = true;
-                excelcells.Value2 = "Заявка на брони";
+                excelcells.Value2 = "Заявка на комплектующие";
                 excelcells.RowHeight = 25;
-                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
-                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = XlVAlign.xlVAlignCenter;
                 excelcells.Font.Name = "Times New Roman";
                 excelcells.Font.Size = 14;
                 excelcells = excelworksheet.get_Range("A2", "B2");
                 excelcells.Merge(Type.Missing);
                 excelcells.Value2 = "Дата:" + model.Date.ToShortDateString();
                 excelcells.RowHeight = 20;
-                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
-                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = XlVAlign.xlVAlignCenter;
                 excelcells.Font.Name = "Times New Roman";
                 excelcells.Font.Size = 12;
 
-                var reservations = context.Components.Select(rec => new ComponentViewModel
-                {
+                var components = context.Components.Select(rec => new ComponentViewModel {
                     Id = rec.Id,
                     Name = rec.Name,
                     Manufacturer = rec.Manufacturer,
                     Brand = rec.Brand
                 }).ToList();
-                var requestReservations = model.RequestComponents;
+                var requestComponents = model.RequestComponents;
 
                 excelcells = excelworksheet.get_Range("A3", "A3");
                 //обводим границы
                 //получаем ячейки для выбеления рамки под таблицу
-                var excelBorder = excelworksheet.get_Range(excelcells, excelcells.get_Offset(requestReservations.Count() - 1, 1));
-                excelBorder.Borders.LineStyle = Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous;
-                excelBorder.Borders.Weight = Microsoft.Office.Interop.Excel.XlBorderWeight.xlThin;
+                var excelBorder = excelworksheet.get_Range(excelcells,
+                excelcells.get_Offset(requestComponents.Count() - 1, 4));
+                excelBorder.Borders.LineStyle = XlLineStyle.xlContinuous;
+                excelBorder.Borders.Weight = XlBorderWeight.xlThin;
                 excelBorder.HorizontalAlignment = Constants.xlCenter;
                 excelBorder.VerticalAlignment = Constants.xlCenter;
-                excelBorder.BorderAround(Microsoft.Office.Interop.Excel.XlLineStyle.xlContinuous,
-                Microsoft.Office.Interop.Excel.XlBorderWeight.xlMedium,
-                Microsoft.Office.Interop.Excel.XlColorIndex.xlColorIndexAutomatic, 1);
-                foreach (var requestReservation in requestReservations)
-                {
-                    excelcells.Value2 = reservations.FirstOrDefault(rec => rec.Id == requestReservation.ComponentID).Name;
+                excelBorder.BorderAround(XlLineStyle.xlContinuous,
+                XlBorderWeight.xlMedium,
+                XlColorIndex.xlColorIndexAutomatic, 1);
+                foreach ( var requestComponent in requestComponents ) {
+                    excelcells.Value2 = components.FirstOrDefault(rec => rec.Id == requestComponent.ComponentID)
+                        .Name;
                     excelcells.ColumnWidth = 20;
-                    excelcells.get_Offset(0, 1).Value2 = requestReservation.CountComponents;
+                    excelcells.get_Offset(0, 1).Value2 = components.FirstOrDefault(rec => rec.Id == requestComponent.ComponentID)
+                        ?.Manufacturer;
+                    excelcells.get_Offset(0, 2).Value2 = components.FirstOrDefault(rec => rec.Id == requestComponent.ComponentID)
+                        ?.Brand;
+                    excelcells.get_Offset(0, 3).Value2 = requestComponent.CountComponents;
                     excelcells = excelcells.get_Offset(1, 0);
                 }
+
                 //сохраняем
                 excel.Workbooks[1].Save();
                 excel.Workbooks[1].Close();
             }
-            catch (Exception)
-            {
+            catch ( Exception ) {
                 throw;
             }
-            finally
-            {
+            finally {
                 //закрываем
                 excel.Quit();
             }
         }
 
-        private void RequestWord(RequestBindingModel model)
-        {
+        private void RequestWord(RequestBindingModel model) {
             Console.WriteLine();
-            if (File.Exists("C:\\Users\\Public\\Documents\\file.doc"))
-            {
-                File.Delete("C:\\Users\\Public\\Documents\\file.doc");
+            if ( File.Exists("C:\\Users\\User\\Documents\\file.doc") ) {
+                File.Delete("C:\\Users\\User\\Documents\\file.doc");
             }
+
             var winword = new Microsoft.Office.Interop.Word.Application();
-            try
-            {
-                object missing = System.Reflection.Missing.Value;
+            try {
+                object missing = Missing.Value;
                 //создаем документ
                 Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                 //получаем ссылку на параграф
@@ -225,9 +212,8 @@ namespace InternetShopImplementations.Implementations
                 //добавляем абзац в документ
                 range.InsertParagraphAfter();
 
-                var requestReservations = model.RequestComponents;
-                var reservations = context.Components.Select(rec => new ComponentViewModel
-                {
+                var requestComponents = model.RequestComponents;
+                var reservations = context.Components.Select(rec => new ComponentViewModel {
                     Id = rec.Id,
                     Name = rec.Name,
                     Manufacturer = rec.Manufacturer,
@@ -236,7 +222,7 @@ namespace InternetShopImplementations.Implementations
                 //создаем таблицу
                 var paragraphTable = document.Paragraphs.Add(Type.Missing);
                 var rangeTable = paragraphTable.Range;
-                var table = document.Tables.Add(rangeTable, requestReservations.Count, 2, ref missing, ref missing);
+                var table = document.Tables.Add(rangeTable, requestComponents.Count, 4, ref missing, ref missing);
                 font = table.Range.Font;
                 font.Size = 14;
                 font.Name = "Times New Roman";
@@ -244,11 +230,19 @@ namespace InternetShopImplementations.Implementations
                 paragraphTableFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
                 paragraphTableFormat.SpaceAfter = 0;
                 paragraphTableFormat.SpaceBefore = 0;
-                for (int i = 0; i < requestReservations.Count; ++i)
-                {
-                    table.Cell(i + 1, 1).Range.Text = reservations.FirstOrDefault(rec => rec.Id == requestReservations[i].ComponentID).Name;
-                    table.Cell(i + 1, 2).Range.Text = requestReservations[i].CountComponents.ToString();
+                for ( int i = 0; i < requestComponents.Count; ++i ) {
+                    table.Cell(i + 1, 1).Range.Text = reservations
+                        .FirstOrDefault(rec => rec.Id == requestComponents[i].ComponentID)
+                        ?.Name;
+                    table.Cell(i + 1, 2).Range.Text = reservations
+                        .FirstOrDefault(rec => rec.Id == requestComponents[i].ComponentID)
+                        ?.Manufacturer;
+                    table.Cell(i + 1, 3).Range.Text = reservations
+                        .FirstOrDefault(rec => rec.Id == requestComponents[i].ComponentID)
+                        ?.Brand;
+                        table.Cell(i + 1, 4).Range.Text = requestComponents[i].CountComponents.ToString();
                 }
+            
                 //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
                 table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
@@ -266,75 +260,65 @@ namespace InternetShopImplementations.Implementations
                 range.InsertParagraphAfter();
                 //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
-                document.SaveAs("C:\\Users\\Public\\Documents\\file.doc", ref fileFormat, ref missing,
+                document.SaveAs("C:\\Users\\User\\Documents\\file.doc", ref fileFormat, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing, ref missing, ref missing, ref missing,
                 ref missing);
                 document.Close(ref missing, ref missing, ref missing);
             }
-            catch (Exception)
-            {
+            catch ( Exception ) {
                 throw;
             }
-            finally
-            {
+            finally {
                 winword.Quit();
             }
         }
 
-        public void DelElement(int id)
-        {
+        public void DelElement(int id) {
             Request request = context.Requests.FirstOrDefault(rec => rec.Id == id);
-            if (request != null)
-            {
+            if ( request != null ) {
                 context.Requests.Remove(request);
                 context.SaveChanges();
             }
-            else
-            {
+            else {
                 throw new Exception("Элемент не найден");
             }
         }
 
-        public RequestViewModel GetElement(int id)
-        {
+        public RequestViewModel GetElement(int id) {
             Request request = context.Requests.FirstOrDefault(rec => rec.Id == id);
-            if (request != null)
-            {
-                return new RequestViewModel
-                {
+            if ( request != null ) {
+                return new RequestViewModel {
                     Id = request.Id,
                     DateCreate = request.Date
                 };
             }
+
             throw new Exception("Элемент не найден");
         }
 
-        public List<RequestViewModel> GetList()
-        {
+        public List<RequestViewModel> GetList() {
             List<RequestViewModel> result = context.Requests
-                .Select(rec => new RequestViewModel
-                {
+                .Select(rec => new RequestViewModel {
                     Id = rec.Id,
                     DateCreate = rec.Date
                 })
-            .ToList();
+                .ToList();
             return result;
         }
 
-        public void UpdElement(RequestBindingModel model)
-        {
+        public void UpdElement(RequestBindingModel model) {
             Request request = context.Requests.FirstOrDefault(rec => rec.Date != model.Date);
-            if (request != null)
-            {
+            if ( request != null ) {
                 throw new Exception("Уже есть заявка с такой датой");
             }
+
             request = context.Requests.FirstOrDefault(rec => rec.Id == model.Id);
-            if (request == null)
-            {
+            if ( request == null ) {
                 throw new Exception("Элемент не найден");
             }
+
             request.Date = model.Date;
             context.SaveChanges();
         }

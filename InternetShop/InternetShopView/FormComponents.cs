@@ -29,9 +29,13 @@ namespace InternetShopView {
                 if ( list != null ) {
                     dataGridViewComponents.DataSource = list;
                     dataGridViewComponents.Columns[0].Visible = false;
-                    dataGridViewComponents.Columns[6].Visible = false;
-                    dataGridViewComponents.Columns[0].AutoSizeMode =
-                        DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dataGridViewComponents.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
             catch ( Exception ex ) {
