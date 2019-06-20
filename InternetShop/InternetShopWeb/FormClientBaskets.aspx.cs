@@ -57,7 +57,7 @@ namespace InternetShopWeb
                     DateFrom = Calendar1.SelectedDate,
                     DateTo = Calendar2.SelectedDate
                 }, Convert.ToInt32(Session["ClientId"]));
-                //service.SendEmail(Session["Email"].ToString(), "Покупка клиента", "", path);
+                service.SendEmail(Session["Email"].ToString(), "Покупка клиента", "", path);
             }
             catch (Exception ex)
             {

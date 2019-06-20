@@ -20,7 +20,7 @@
         <asp:Button ID="ButtonReport" runat="server" Text="Отчет" OnClick="ButtonReport_Click" />&nbsp;<br />
                 <asp:Button ID="ButtonBackUpXML" runat="server" Text="Бекап БД - XML" OnClick="ButtonBackUpXML_Click" />
         <asp:Button ID="ButtonBackUpJSON" runat="server" Text="Бекап БД - JSON" OnClick="ButtonBackUpJSON_Click" /><br />
-        <asp:Button ID="ButtonCreateBuy" runat="server" Text="Выбрать покупку" OnClick="ButtonCreateBuy_Click" />
+        <asp:Button ID="ButtonCreateBuy" runat="server" Text="Создать покупку" OnClick="ButtonCreateBuy_Click" />
         <asp:Button ID="ButtonUpdBuy" runat="server" Text="Посмотреть детали покупки" OnClick="ButtonUpdBuy_Click" Width="228px" />
         <asp:Button ID="ButtonMakeReservation" runat="server" Text="Зарезервировать" OnClick="ButtonMakeReservation_Click" />
         <asp:Button ID="ButtonUpd" runat="server" Text="Обновить список" OnClick="ButtonUpd_Click" />

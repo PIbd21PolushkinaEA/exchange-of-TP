@@ -14,6 +14,8 @@ namespace InternetShopServiceDAL.Interfaces
 
         List<ProductViewModel> GetAvailableList();
 
+        List<ProductViewModel> GetClientList(int ClientId);
+
         ProductViewModel GetElement(int id);
 
         void AddElement(ProductBindingModel model);

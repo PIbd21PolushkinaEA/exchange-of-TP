@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using InternetShopServiceDAL.BindingModels;
@@ -26,7 +24,7 @@ namespace InternetShopWeb
             {
                 try
                 {
-                    List<ProductViewModel> list = serviceS.GetList();
+                    List<ProductViewModel> list = serviceS.GetClientList(Convert.ToInt32(Session["ClientId"]));
                     if (list != null)
                     {
                         DropDownListProduct.DataSource = list;

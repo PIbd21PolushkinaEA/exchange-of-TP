@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InternetShopModel;
 using InternetShopServiceDAL.BindingModels;
 using InternetShopServiceDAL.Interfaces;
 using InternetShopServiceDAL.ViewModel;
+using System.Data.Entity;
 
 namespace InternetShopImplementations.Implementations
 {
@@ -50,6 +49,81 @@ namespace InternetShopImplementations.Implementations
                     Count = recPC.Count
                 }).ToList()
             }).ToList();
+            return result;
+        }
+
+        public List<ProductViewModel> GetClientList(int ClientId)
+        {
+            var groupProducts = context.ProductsBasket
+                                    .Include(rec => rec.Product)
+                                    .Include(rec => rec.Basket)
+                                    .Where(rec => rec.Basket.ClientId == ClientId)
+                                    .Select(rec => new ProductViewModel
+                                    {
+                                        Id = rec.ProductId,
+                                        ProductName = rec.ProductName,
+                                        Price = rec.Count
+                                    })
+                                    .GroupBy(rec => rec.Id)
+                                    .Select(rec => new
+                                    {
+                                        ProductId = rec.Key,
+                                        Count = rec.Sum(r => r.Price)
+                                    })
+                                    .OrderByDescending(rec => rec.Count)
+                                    .ToList();
+
+            List<ProductViewModel> result = new List<ProductViewModel>();
+            foreach (var pre in groupProducts)
+            {
+                var pres = context.Products.FirstOrDefault(rec => rec.Id == pre.ProductId);
+                result.Add(new ProductViewModel
+                {
+                    Id = pres.Id,
+                    ProductName = pres.ProductName,
+                    Price = pres.Price,
+                    ComponentsProduct = context.ComponentsProduct
+                                              .Where(recPM => recPM.ProductId == pres.Id)
+                                              .Select(recPM => new ComponentProductViewModel
+                                              {
+                                                  Id = recPM.Id,
+                                                  ProductId = recPM.ProductId,
+                                                  ComponentId = recPM.ComponentId,
+                                                  ComponentName = recPM.ComponentName,
+                                                  Count = recPM.Count
+                                              }).ToList()
+                });
+            }
+            foreach (var el in context.Products)
+            {
+                bool flag = false;
+                foreach (var pro in result)
+                {
+                    if (el.Id == pro.Id)
+                    {
+                        flag = true;
+                    }
+                }
+                if (!flag)
+                {
+                    result.Add(new ProductViewModel
+                    {
+                        Id = el.Id,
+                        ProductName = el.ProductName,
+                        Price = el.Price,
+                        ComponentsProduct = context.ComponentsProduct
+                                              .Where(recPM => recPM.ProductId == el.Id)
+                                              .Select(recPM => new ComponentProductViewModel
+                                              {
+                                                  Id = recPM.Id,
+                                                  ProductId = recPM.ProductId,
+                                                  ComponentId = recPM.ComponentId,
+                                                  ComponentName = recPM.ComponentName,
+                                                  Count = recPM.Count
+                                              }).ToList()
+                    });
+                }
+            }
             return result;
         }
 

@@ -20,7 +20,7 @@
             <br />
             <br />
             Пароль&nbsp;
-        <asp:TextBox ID="textBoxPassword" runat="server" Height="16px" Width="280px">qwerty</asp:TextBox>
+        <asp:TextBox ID="textBoxPassword" runat="server" Height="16px" Width="280px">123</asp:TextBox>
             <br />
             <br />
             <asp:Button ID="RegistrationButton" runat="server" OnClick="RegistrationButton_Click" Text="Зарегестрироваться" />

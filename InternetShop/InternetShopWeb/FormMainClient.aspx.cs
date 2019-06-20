@@ -84,7 +84,7 @@ namespace InternetShopWeb
                     DateFrom = date,
                     DateTo = DateTime.Now
                 }, Convert.ToInt32(Session["ClientId"]));
-                //service.SendEmail(Session["Email"].ToString(), "Оповещение по резервированию", "Резервирование выполнено", path);
+                service.SendEmail(Session["Email"].ToString(), "Оповещение по резервированию", "Резервирование выполнено", path);
                 LoadData();
                 Server.Transfer("FormMainClient.aspx");
             }
