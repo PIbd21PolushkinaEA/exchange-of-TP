@@ -120,60 +120,6 @@ namespace InternetShopImplementations.Implementations {
         }
 
         public void AddElement(ProductBindingModel model) {
-            /*using ( var transaction = context.Database.BeginTransaction() ) {
-                try {
-                    Product element = context.Products.FirstOrDefault(rec => rec.ProductName == model.ProductName);
-                    if ( element != null ) {
-                        throw new Exception("Уже есть товар с таким названием");
-                    }
-
-                    element = new Product {
-                        ProductName = model.ProductName,
-                        Price = model.Price,
-                    };
-                    context.Products.Add(element);
-                    /*List<ComponentProduct> list = new List<ComponentProduct>();
-                    for ( int i = 0; i < model.ComponentsProduct.Count; i++ ) {
-                        ComponentProductBindingModel elem = model.ComponentsProduct[i];
-                        list.Add(new ComponentProduct {
-                            Id = elem.Id,
-                            ProductId = element.Id,
-                            ComponentId = elem.ComponentId,
-                            ComponentName = elem.ComponentName,
-                            Manuf = elem.Manuf,
-                            Brand = elem.Brand,
-                            ComponentRating = elem.ComponentRating,
-                            Count = elem.Count
-                        });
-                    }
-
-                    element.ComponentsProduct = list;
-                    context.Products.Add(element);
-                    context.SaveChanges();#1#
-                    // убираем дубли по компонентам    
-                    var groupComponents = model.ComponentsProduct
-                        .GroupBy(rec => rec.ComponentId)
-                        .Select(rec => new {
-                            ComponentId = rec.Key,
-                            Count = rec.Sum(r => r.Count)
-                        });
-                    // добавляем компоненты     
-                    foreach ( var groupComponent in groupComponents ) {
-                        context.ComponentsProduct.Add(new ComponentProduct {
-                            ProductId = element.Id,
-                            ComponentId = groupComponent.ComponentId,
-                            Count = groupComponent.Count
-                        });
-                        context.SaveChanges();
-                    }
-
-                    transaction.Commit();
-                }
-                catch ( Exception ) {
-                    transaction.Rollback();
-                    throw;
-                }
-            }*/
             using(var transaction = context.Database.BeginTransaction())
             {
                 try
