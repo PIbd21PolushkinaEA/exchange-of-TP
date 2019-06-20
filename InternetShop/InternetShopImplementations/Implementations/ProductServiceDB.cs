@@ -120,36 +120,31 @@ namespace InternetShopImplementations.Implementations {
         }
 
         public void AddElement(ProductBindingModel model) {
-            using(var transaction = context.Database.BeginTransaction())
-            {
-                try
-                {
+            using ( var transaction = context.Database.BeginTransaction() ) {
+                try {
                     Product element = context.Products.FirstOrDefault(rec => rec.ProductName == model.ProductName);
-                    if (element != null)
-                    {
+                    if ( element != null ) {
                         throw new Exception("Уже есть тур с таким названием");
                     }
-                    element = new Product
-                    {
+
+                    element = new Product {
                         ProductName = model.ProductName,
-                        Price =  model.Price
+                        Price = model.Price
                     };
                     context.Products.Add(element);
                     context.SaveChanges();
 
                     var groupComponents = model.ComponentsProduct
                         .GroupBy(rec => rec.ComponentId)
-                        .Select(rec => new
-                        {
+                        .Select(rec => new {
                             ComponentId = rec.Key,
                             Count = rec.Sum(r => r.Count)
                         });
 
-                    foreach (var groupComponent in groupComponents) {
+                    foreach ( var groupComponent in groupComponents ) {
                         Component elem = context.Components.SingleOrDefault(component =>
                             component.Id == groupComponent.ComponentId);
-                        context.ComponentsProduct.Add(new ComponentProduct
-                        {
+                        context.ComponentsProduct.Add(new ComponentProduct {
                             ProductId = element.Id,
                             ComponentId = groupComponent.ComponentId,
                             Manuf = elem?.Manufacturer,
@@ -160,10 +155,10 @@ namespace InternetShopImplementations.Implementations {
                         });
                         context.SaveChanges();
                     }
+
                     transaction.Commit();
                 }
-                catch (Exception)
-                {
+                catch ( Exception ) {
                     transaction.Rollback();
                     throw;
                 }
@@ -193,6 +188,12 @@ namespace InternetShopImplementations.Implementations {
                     var updateComponents = context.ComponentsProduct.Where(rec => rec.ProductId == model.Id &&
                                                                                   compIds.Contains(rec.ComponentId));
                     foreach ( var updateComponent in updateComponents ) {
+                        Component elem = context.Components.SingleOrDefault(component =>
+                            component.Id == updateComponent.ComponentId);
+                        updateComponent.ComponentName = elem.Name;
+                        updateComponent.Manuf = elem.Manufacturer;
+                        updateComponent.Brand = elem.Brand;
+                        updateComponent.ComponentRating = elem.Rating;
                         updateComponent.Count = model.ComponentsProduct
                             .FirstOrDefault(rec => rec.Id == updateComponent.Id).Count;
                     }
@@ -219,36 +220,20 @@ namespace InternetShopImplementations.Implementations {
                             context.SaveChanges();
                         }
                         else {
+                            Component elem = context.Components.SingleOrDefault(component =>
+                                component.Id == groupComponent.ComponentId);
                             context.ComponentsProduct.Add(new ComponentProduct {
                                 ProductId = model.Id,
                                 ComponentId = groupComponent.ComponentId,
+                                Manuf = elem?.Manufacturer,
+                                Brand = elem?.Brand,
+                                ComponentName = elem?.Name,
+                                ComponentRating = elem.Rating,
                                 Count = groupComponent.Count
                             });
                             context.SaveChanges();
                         }
                     }
-
-                    /*List<ComponentProduct> list = new List<ComponentProduct>();
-                    for ( int i = 0; i < model.ComponentsProduct.Count; i++ ) {
-                        if ( model.ComponentsProduct[i].ProductId != 0 ) {
-                            continue;
-                        }
-                        ComponentProductBindingModel elem = model.ComponentsProduct[i];
-                        list.Add(new ComponentProduct {
-                            Id = elem.Id,
-                            ProductId = element.Id,
-                            ComponentId = elem.ComponentId,
-                            ComponentName = elem.ComponentName,
-                            Manuf = elem.Manuf,
-                            Brand = elem.Brand,
-                            ComponentRating = elem.ComponentRating,
-                            Count = elem.Count
-                        });
-                    }
-
-                    element.ComponentsProduct = list;
-                    context.Products.Add(element);
-                    context.SaveChanges();*/
                     transaction.Commit();
                 }
                 catch ( Exception ) {
