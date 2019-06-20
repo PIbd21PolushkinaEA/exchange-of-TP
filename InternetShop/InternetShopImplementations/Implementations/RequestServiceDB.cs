@@ -80,7 +80,7 @@ namespace InternetShopImplementations.Implementations {
                         fName = "C:\\Users\\User\\Documents\\file.xls";
                     }
 
-                    //Mail.SendEmail(null, "Заявка на брони", "Заявка на брони в формате " + typeMessage, fName);
+                    Mail.SendEmail(null, "Заявка на брони", "Заявка на брони в формате " + typeMessage, fName);
                     transaction.Commit();
                 }
                 catch ( Exception ) {

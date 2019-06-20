@@ -14,7 +14,7 @@ namespace InternetShopImplementations {
         /// <param name="text"></param>
         /// <param name="fileName">Может быть null, в таком случае файл не будет прикреплен</param>
         public static void SendEmail(string mailAddress, string subject, string text, string fileName) {
-            MailMessage objMailMessage = new MailMessage("labwork15kafis@gmail.com",
+            MailMessage objMailMessage = new MailMessage("trepixh@gmail.com",
             "pixert@mail.ru", subject, text);
             SmtpClient objSmtpClient;
             try {
@@ -23,15 +23,10 @@ namespace InternetShopImplementations {
                 if ( fileName != null ) {
                     objMailMessage.Attachments.Add(new Attachment(fileName));
                 }
-
-                objMailMessage.SubjectEncoding = Encoding.UTF8;
-                objMailMessage.BodyEncoding = Encoding.UTF8;
                 objSmtpClient = new SmtpClient("smtp.gmail.com", 587);
-                objSmtpClient.UseDefaultCredentials = false;
+                objSmtpClient.Credentials = new NetworkCredential("trepixh@gmail.com",
+                "jpdyykmibxgxdqfb");
                 objSmtpClient.EnableSsl = true;
-                objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                objSmtpClient.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["MailLogin"],
-                ConfigurationManager.AppSettings["MailPassword"]);
                 objSmtpClient.Send(objMailMessage);
             }
             catch ( Exception ex ) {
